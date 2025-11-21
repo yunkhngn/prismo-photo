@@ -1,10 +1,10 @@
-import "@/styles/globals.css";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 
-export default function App({ Component, pageProps }) {
+export function Provider({ children }) {
   return (
     <ChakraProvider value={defaultSystem}>
-      <Component {...pageProps} />
+      {children}
     </ChakraProvider>
   );
 }
+
