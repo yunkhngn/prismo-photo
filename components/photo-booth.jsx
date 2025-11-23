@@ -6,6 +6,7 @@ import { Card, CardBody } from "@heroui/card";
 import FilterSelector from "./filter-selector";
 import FrameSelector from "./frame-selector";
 import PhotoStrip from "./photo-strip";
+import PhotoStripDrag from "./photo-strip-drag";
 import ExportButton from "./export-button";
 
 export default function PhotoBooth() {
@@ -19,6 +20,7 @@ export default function PhotoBooth() {
   const [videoRecap, setVideoRecap] = useState(false);
   const [showFrameSelector, setShowFrameSelector] = useState(false);
   const [facingMode, setFacingMode] = useState("user");
+  const [stripPhotos, setStripPhotos] = useState(Array(8).fill(null));
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -31,8 +33,14 @@ export default function PhotoBooth() {
 
   const startCamera = async () => {
     try {
+      // 4:3 aspect ratio - common resolutions: 1280x960, 1600x1200, 1920x1440
       const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode, width: 1280, height: 720 },
+        video: { 
+          facingMode, 
+          width: { ideal: 1280 },
+          height: { ideal: 960 },
+          aspectRatio: { ideal: 4/3 }
+        },
       });
       setStream(mediaStream);
       if (videoRef.current) {
@@ -62,16 +70,49 @@ export default function PhotoBooth() {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    // Calculate 4:3 aspect ratio dimensions
+    const videoAspectRatio = video.videoWidth / video.videoHeight;
+    const targetAspectRatio = 4 / 3;
+    
+    let sourceX = 0;
+    let sourceY = 0;
+    let sourceWidth = video.videoWidth;
+    let sourceHeight = video.videoHeight;
+
+    // Crop to 4:3 if video is not already 4:3
+    if (videoAspectRatio > targetAspectRatio) {
+      // Video is wider than 4:3, crop width
+      sourceWidth = video.videoHeight * targetAspectRatio;
+      sourceX = (video.videoWidth - sourceWidth) / 2;
+    } else if (videoAspectRatio < targetAspectRatio) {
+      // Video is taller than 4:3, crop height
+      sourceHeight = video.videoWidth / targetAspectRatio;
+      sourceY = (video.videoHeight - sourceHeight) / 2;
+    }
+
+    // Set canvas to 4:3 ratio (use 1280x960 for good quality)
+    const outputWidth = 1280;
+    const outputHeight = 960;
+    canvas.width = outputWidth;
+    canvas.height = outputHeight;
 
     // Flip image horizontally for front camera
     if (facingMode === "user") {
       context.translate(canvas.width, 0);
       context.scale(-1, 1);
+      context.drawImage(
+        video,
+        sourceX, sourceY, sourceWidth, sourceHeight,
+        0, 0, outputWidth, outputHeight
+      );
+      context.setTransform(1, 0, 0, 1, 0, 0);
+    } else {
+      context.drawImage(
+        video,
+        sourceX, sourceY, sourceWidth, sourceHeight,
+        0, 0, outputWidth, outputHeight
+      );
     }
-    context.drawImage(video, 0, 0);
-    context.setTransform(1, 0, 0, 1, 0, 0);
 
     canvas.toBlob((blob) => {
       const imageUrl = URL.createObjectURL(blob);
@@ -143,12 +184,12 @@ export default function PhotoBooth() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-6">
-          <h1 className="text-5xl font-bold text-pink-500 mb-2">PhotoXinhh</h1>
-          <p className="text-xl text-pink-400">Capture Memories</p>
+          <h1 className="text-5xl font-bold text-green-500 mb-2">Prism Photo </h1>
+          <p className="text-xl text-green-400">Capture Memories</p>
         </div>
 
         {/* Settings Bar */}
@@ -187,16 +228,16 @@ export default function PhotoBooth() {
             variant="flat"
             size="sm"
             onPress={() => setShowFrameSelector(!showFrameSelector)}
-            className="bg-pink-500 text-white"
+            className="bg-green-500 text-white"
           >
             Chọn Khung
           </Button>
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-6">
           {/* Camera Preview - Left Side */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-5">
             <Card className="relative">
               <CardBody className="p-0">
                 <div className="relative bg-black rounded-lg overflow-hidden">
@@ -209,6 +250,7 @@ export default function PhotoBooth() {
                     style={{
                       transform: facingMode === "user" ? "scaleX(-1)" : "none",
                       minHeight: "500px",
+                      aspectRatio: "4/3",
                     }}
                   />
                   <canvas ref={canvasRef} className="hidden" />
@@ -248,7 +290,7 @@ export default function PhotoBooth() {
 
                   {/* Status Indicator */}
                   <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-pink-500 text-white px-6 py-2 rounded-full text-sm font-medium">
+                    <div className="bg-green-500 text-white px-6 py-2 rounded-full text-sm font-medium">
                       Đã Chụp {photos.length}/4
                     </div>
                   </div>
@@ -257,8 +299,9 @@ export default function PhotoBooth() {
             </Card>
           </div>
 
-          {/* Photo Slots - Right Side */}
-          <div className="lg:col-span-1 space-y-3">
+          {/* Photo Slots - Middle */}
+          <div className="lg:col-span-3 space-y-3">
+            {/* 4 Photo Slots */}
             {Array.from({ length: 4 }).map((_, index) => {
               const photo = photos[index];
               return (
@@ -270,6 +313,10 @@ export default function PhotoBooth() {
                           src={photo}
                           alt={`Photo ${index + 1}`}
                           className="w-full h-32 object-cover rounded-lg"
+                          draggable
+                          onDragStart={(e) => {
+                            e.dataTransfer.effectAllowed = "move";
+                          }}
                         />
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors rounded-lg flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
                           <Button
@@ -328,9 +375,18 @@ export default function PhotoBooth() {
                 </Card>
               );
             })}
-            <div className="bg-pink-500 text-white px-4 py-2 rounded-full text-sm font-medium text-center">
+            <div className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-medium text-center">
               {photos.length}/4
             </div>
+
+          </div>
+
+          {/* Photo Strip Drag - Right Side (Frame) */}
+          <div className="lg:col-span-4">
+            <PhotoStripDrag
+              photos={photos}
+              onStripPhotosChange={setStripPhotos}
+            />
           </div>
         </div>
 
@@ -342,7 +398,7 @@ export default function PhotoBooth() {
               color="primary"
               size="lg"
               radius="full"
-              className="bg-pink-500 text-white w-16 h-16"
+              className="bg-green-500 text-white w-16 h-16"
               onPress={() => handleCapture(false)}
               isDisabled={isCapturing || photos.length >= 4}
             >
@@ -375,7 +431,7 @@ export default function PhotoBooth() {
               color="primary"
               size="lg"
               radius="full"
-              className="bg-pink-500 text-white w-16 h-16"
+              className="bg-green-500 text-white w-16 h-16"
               onPress={() => handleCapture(true)}
               isDisabled={isCapturing || photos.length >= 4}
             >
@@ -446,7 +502,7 @@ export default function PhotoBooth() {
             <Card>
               <CardBody>
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-semibold">Tạo Photo Strip (8 khung)</h3>
+                  <h3 className="text-lg font-semibold">Tạo Photo Strip</h3>
                   <Button
                     size="sm"
                     variant="light"
@@ -457,6 +513,7 @@ export default function PhotoBooth() {
                 </div>
                 <PhotoStrip
                   photos={photos}
+                  stripPhotos={stripPhotos}
                   onExport={(url) => {
                     // Auto download when generated
                     const link = document.createElement("a");

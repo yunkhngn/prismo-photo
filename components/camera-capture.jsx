@@ -17,8 +17,14 @@ export default function CameraCapture({ onCapture, onClose }) {
 
   const startCamera = async () => {
     try {
+      // 4:3 aspect ratio
       const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user", width: 1280, height: 720 },
+        video: { 
+          facingMode: "user", 
+          width: { ideal: 1280 },
+          height: { ideal: 960 },
+          aspectRatio: { ideal: 4/3 }
+        },
       });
       setStream(mediaStream);
       if (videoRef.current) {
@@ -44,13 +50,40 @@ export default function CameraCapture({ onCapture, onClose }) {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    // Calculate 4:3 aspect ratio dimensions
+    const videoAspectRatio = video.videoWidth / video.videoHeight;
+    const targetAspectRatio = 4 / 3;
+    
+    let sourceX = 0;
+    let sourceY = 0;
+    let sourceWidth = video.videoWidth;
+    let sourceHeight = video.videoHeight;
+
+    // Crop to 4:3 if video is not already 4:3
+    if (videoAspectRatio > targetAspectRatio) {
+      // Video is wider than 4:3, crop width
+      sourceWidth = video.videoHeight * targetAspectRatio;
+      sourceX = (video.videoWidth - sourceWidth) / 2;
+    } else if (videoAspectRatio < targetAspectRatio) {
+      // Video is taller than 4:3, crop height
+      sourceHeight = video.videoWidth / targetAspectRatio;
+      sourceY = (video.videoHeight - sourceHeight) / 2;
+    }
+
+    // Set canvas to 4:3 ratio (use 1280x960 for good quality)
+    const outputWidth = 1280;
+    const outputHeight = 960;
+    canvas.width = outputWidth;
+    canvas.height = outputHeight;
 
     // Flip image horizontally for mirror effect
     context.translate(canvas.width, 0);
     context.scale(-1, 1);
-    context.drawImage(video, 0, 0);
+    context.drawImage(
+      video,
+      sourceX, sourceY, sourceWidth, sourceHeight,
+      0, 0, outputWidth, outputHeight
+    );
 
     // Reset transform
     context.setTransform(1, 0, 0, 1, 0, 0);

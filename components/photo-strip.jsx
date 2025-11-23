@@ -20,46 +20,6 @@ export default function PhotoStrip({ photos, onExport }) {
     setStripPhotos(initial);
   }, [photos]);
 
-  const handleDragStart = (e, photoIndex, fromStrip = false) => {
-    setDraggedIndex(photoIndex);
-    setDraggedFromStrip(fromStrip);
-    e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/html", e.target.outerHTML);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-  };
-
-  const handleDrop = (e, targetIndex) => {
-    e.preventDefault();
-    
-    if (draggedFromStrip) {
-      // Moving within strip
-      const newStripPhotos = [...stripPhotos];
-      const draggedPhoto = stripPhotos[draggedIndex];
-      newStripPhotos[draggedIndex] = stripPhotos[targetIndex];
-      newStripPhotos[targetIndex] = draggedPhoto;
-      setStripPhotos(newStripPhotos);
-    } else {
-      // Dropping from photo gallery
-      if (draggedIndex !== null && draggedIndex < photos.length) {
-        const newStripPhotos = [...stripPhotos];
-        newStripPhotos[targetIndex] = photos[draggedIndex];
-        setStripPhotos(newStripPhotos);
-      }
-    }
-    
-    setDraggedIndex(null);
-    setDraggedFromStrip(false);
-  };
-
-  const handleRemoveFromStrip = (index) => {
-    const newStripPhotos = [...stripPhotos];
-    newStripPhotos[index] = null;
-    setStripPhotos(newStripPhotos);
-  };
 
   const generatePhotoStrip = () => {
     const validPhotos = stripPhotos.filter(photo => photo !== null);
@@ -79,7 +39,7 @@ export default function PhotoStrip({ photos, onExport }) {
     const photoWidth = 550; // Width of each photo
     const photoHeight = 700; // Height of each photo
     const padding = 25; // Padding between photos
-    const backgroundColor = "#FF69B4"; // Pink background
+    const backgroundColor = "#22C55E"; // Green background (green-500)
 
     canvas.width = stripWidth;
     canvas.height = stripHeight;
@@ -167,152 +127,39 @@ export default function PhotoStrip({ photos, onExport }) {
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Left: Photo Gallery */}
-        <div className="lg:col-span-1">
-          <Card>
-            <CardBody className="p-4">
-              <h4 className="text-lg font-semibold mb-3">Ảnh đã chụp</h4>
-              <div className="space-y-2">
-                {photos.length > 0 ? (
-                  photos.map((photo, index) => (
-                    <div
-                      key={index}
-                      draggable
-                      onDragStart={(e) => handleDragStart(e, index, false)}
-                      className="cursor-move border-2 border-dashed border-gray-300 rounded-lg p-2 hover:border-pink-500 transition-colors"
-                    >
-                      <img
-                        src={photo}
-                        alt={`Photo ${index + 1}`}
-                        className="w-full h-24 object-cover rounded"
-                      />
-                      <p className="text-xs text-center mt-1 text-gray-600">Ảnh {index + 1}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-sm text-gray-500 text-center py-4">
-                    Chưa có ảnh. Hãy chụp ảnh trước.
-                  </p>
-                )}
-              </div>
-            </CardBody>
-          </Card>
-        </div>
+      <Card>
+        <CardBody className="p-4">
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <h3 className="text-lg font-semibold">Tạo Photo Strip</h3>
+              <p className="text-sm text-gray-600">
+                Từ {stripPhotos.filter(p => p !== null).length}/8 ảnh đã sắp xếp
+              </p>
+            </div>
+            <Button
+              color="primary"
+              size="lg"
+              onPress={generatePhotoStrip}
+              isLoading={isGenerating}
+              isDisabled={stripPhotos.filter(p => p !== null).length === 0}
+            >
+              {isGenerating ? "Đang tạo..." : "Tạo Photo Strip"}
+            </Button>
+          </div>
 
-        {/* Right: Photo Strip Frames */}
-        <div className="lg:col-span-2">
-          <Card>
-            <CardBody className="p-4">
-              <div className="flex justify-between items-center mb-4">
-                <div>
-                  <h3 className="text-xl font-semibold">Photo Strip (8 khung)</h3>
-                  <p className="text-sm text-gray-600">
-                    Kéo thả ảnh vào các khung bên dưới
-                  </p>
-                </div>
-                <Button
-                  color="primary"
-                  size="lg"
-                  onPress={generatePhotoStrip}
-                  isLoading={isGenerating}
-                  isDisabled={stripPhotos.filter(p => p !== null).length === 0}
-                >
-                  {isGenerating ? "Đang tạo..." : "Tạo Photo Strip"}
-                </Button>
-              </div>
-
-              {/* 8 Frames Grid */}
-              <div className="bg-pink-100 rounded-lg p-4">
-                <div className="grid grid-cols-2 gap-3">
-                  {stripPhotos.map((photo, index) => (
-                    <div
-                      key={index}
-                      onDragOver={handleDragOver}
-                      onDrop={(e) => handleDrop(e, index)}
-                      className={`relative aspect-[550/700] border-2 border-dashed rounded-lg overflow-hidden transition-all ${
-                        photo
-                          ? "border-pink-500 bg-white"
-                          : "border-gray-300 bg-gray-50 hover:border-pink-400"
-                      }`}
-                    >
-                      {photo ? (
-                        <>
-                          <img
-                            src={photo}
-                            alt={`Frame ${index + 1}`}
-                            className="w-full h-full object-cover"
-                            draggable
-                            onDragStart={(e) => handleDragStart(e, index, true)}
-                          />
-                          <div className="absolute top-1 right-1">
-                            <Button
-                              isIconOnly
-                              size="sm"
-                              color="danger"
-                              variant="flat"
-                              className="bg-white/90 backdrop-blur-sm"
-                              onPress={() => handleRemoveFromStrip(index)}
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={2}
-                                stroke="currentColor"
-                                className="w-4 h-4"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M6 18L18 6M6 6l12 12"
-                                />
-                              </svg>
-                            </Button>
-                          </div>
-                          <div className="absolute bottom-1 left-1 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                            {index + 1}
-                          </div>
-                        </>
-                      ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center text-gray-400">
-                          <svg
-                            className="w-12 h-12 mb-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                            />
-                          </svg>
-                          <p className="text-xs">Khung {index + 1}</p>
-                          <p className="text-xs mt-1">Kéo ảnh vào đây</p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-4 flex justify-center">
-                <Button
-                  color="secondary"
-                  size="lg"
-                  variant="flat"
-                  onPress={downloadStrip}
-                  isDisabled={!canvasRef.current || isGenerating}
-                >
-                  Tải xuống Photo Strip
-                </Button>
-              </div>
-            </CardBody>
-          </Card>
-        </div>
-      </div>
+          <div className="mt-4 flex justify-center">
+            <Button
+              color="secondary"
+              size="lg"
+              variant="flat"
+              onPress={downloadStrip}
+              isDisabled={!canvasRef.current || isGenerating}
+            >
+              Tải xuống Photo Strip
+            </Button>
+          </div>
+        </CardBody>
+      </Card>
 
       <canvas ref={canvasRef} className="hidden" />
     </div>
