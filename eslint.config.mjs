@@ -3,11 +3,9 @@ import { fixupConfigRules, fixupPluginRules } from "@eslint/compat";
 import react from "eslint-plugin-react";
 import unusedImports from "eslint-plugin-unused-imports";
 import _import from "eslint-plugin-import";
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import jsxA11Y from "eslint-plugin-jsx-a11y";
 import prettier from "eslint-plugin-prettier";
 import globals from "globals";
-import tsParser from "@typescript-eslint/parser";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
@@ -54,7 +52,6 @@ export default defineConfig([globalIgnores([
         react: fixupPluginRules(react),
         "unused-imports": unusedImports,
         import: fixupPluginRules(_import),
-        "@typescript-eslint": typescriptEslint,
         "jsx-a11y": fixupPluginRules(jsxA11Y),
         prettier: fixupPluginRules(prettier),
     },
@@ -65,7 +62,6 @@ export default defineConfig([globalIgnores([
             ...globals.node,
         },
 
-        parser: tsParser,
         ecmaVersion: 12,
         sourceType: "module",
 
@@ -82,7 +78,7 @@ export default defineConfig([globalIgnores([
         },
     },
 
-    files: ["**/*.ts", "**/*.tsx"],
+    files: ["**/*.js", "**/*.jsx"],
 
     rules: {
         "no-console": "warn",
@@ -93,21 +89,17 @@ export default defineConfig([globalIgnores([
         "jsx-a11y/click-events-have-key-events": "warn",
         "jsx-a11y/interactive-supports-focus": "warn",
         "prettier/prettier": "warn",
-        "no-unused-vars": "off",
-        "unused-imports/no-unused-vars": "off",
-        "unused-imports/no-unused-imports": "warn",
-
-        "@typescript-eslint/no-unused-vars": ["warn", {
+        "no-unused-vars": ["warn", {
             args: "after-used",
             ignoreRestSiblings: false,
             argsIgnorePattern: "^_.*?$",
         }],
+        "unused-imports/no-unused-vars": "off",
+        "unused-imports/no-unused-imports": "warn",
 
         "import/order": ["warn", {
             groups: [
-                "type",
                 "builtin",
-                "object",
                 "external",
                 "internal",
                 "parent",
