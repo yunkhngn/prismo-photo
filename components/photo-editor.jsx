@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Button } from "@heroui/button";
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Tabs, Tab } from "@heroui/tabs";
-import CameraCapture from "./camera-capture";
-import PhotoGallery from "./photo-gallery";
-import FilterSelector from "./filter-selector";
-import FrameSelector from "./frame-selector";
-import ExportButton from "./export-button";
+import CameraCapture from "./CameraCapture";
+import PhotoGallery from "./PhotoGallery";
+import FilterSelector from "./FilterSelector";
+import FrameSelector from "./FrameSelector";
+import ExportButton from "./ExportButton";
 
 export default function PhotoEditor() {
   const [photos, setPhotos] = useState([]);

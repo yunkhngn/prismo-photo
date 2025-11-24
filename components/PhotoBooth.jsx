@@ -3,11 +3,11 @@ import { Button } from "@heroui/button";
 import { Select, SelectItem } from "@heroui/select";
 import { Switch } from "@heroui/switch";
 import { Card, CardBody } from "@heroui/card";
-import FilterSelector from "./filter-selector";
-import FrameSelector from "./frame-selector";
-import PhotoStrip from "./photo-strip";
-import PhotoStripDrag from "./photo-strip-drag";
-import ExportButton from "./export-button";
+import FilterSelector from "./FilterSelector";
+import FrameSelector from "./FrameSelector";
+import PhotoStrip from "./PhotoStrip";
+import PhotoStripDrag from "./PhotoStripDrag";
+import ExportButton from "./ExportButton";
 
 export default function PhotoBooth() {
   const [photos, setPhotos] = useState([]);
@@ -20,7 +20,7 @@ export default function PhotoBooth() {
   const [videoRecap, setVideoRecap] = useState(false);
   const [showFrameSelector, setShowFrameSelector] = useState(false);
   const [facingMode, setFacingMode] = useState("user");
-  const [stripPhotos, setStripPhotos] = useState(Array(8).fill(null));
+  const [stripPhotos, setStripPhotos] = useState(Array(4).fill(null));
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -235,10 +235,10 @@ export default function PhotoBooth() {
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-6 items-stretch">
           {/* Camera Preview - Left Side */}
-          <div className="lg:col-span-5">
-            <Card className="relative">
+          <div className="lg:col-span-5 flex">
+            <Card className="relative flex-1 flex flex-col">
               <CardBody className="p-0">
                 <div className="relative bg-black rounded-lg overflow-hidden">
                   <video
@@ -300,7 +300,7 @@ export default function PhotoBooth() {
           </div>
 
           {/* Photo Slots - Middle */}
-          <div className="lg:col-span-3 space-y-3">
+          <div className="lg:col-span-3 flex flex-col space-y-3">
             {/* 4 Photo Slots */}
             {Array.from({ length: 4 }).map((_, index) => {
               const photo = photos[index];
@@ -312,10 +312,12 @@ export default function PhotoBooth() {
                         <img
                           src={photo}
                           alt={`Photo ${index + 1}`}
-                          className="w-full h-32 object-cover rounded-lg"
+                          className="w-full h-32 object-cover rounded-lg cursor-move"
                           draggable
                           onDragStart={(e) => {
                             e.dataTransfer.effectAllowed = "move";
+                            e.dataTransfer.setData("text/plain", index.toString());
+                            e.dataTransfer.setData("photo-url", photo);
                           }}
                         />
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors rounded-lg flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
@@ -382,11 +384,13 @@ export default function PhotoBooth() {
           </div>
 
           {/* Photo Strip Drag - Right Side (Frame) */}
-          <div className="lg:col-span-4">
-            <PhotoStripDrag
-              photos={photos}
-              onStripPhotosChange={setStripPhotos}
-            />
+          <div className="lg:col-span-4 flex">
+            <div className="flex-1">
+              <PhotoStripDrag
+                photos={photos}
+                onStripPhotosChange={setStripPhotos}
+              />
+            </div>
           </div>
         </div>
 
@@ -512,7 +516,6 @@ export default function PhotoBooth() {
                   </Button>
                 </div>
                 <PhotoStrip
-                  photos={photos}
                   stripPhotos={stripPhotos}
                   onExport={(url) => {
                     // Auto download when generated

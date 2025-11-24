@@ -3,15 +3,13 @@ import { Button } from "@heroui/button";
 import { Card, CardBody } from "@heroui/card";
 
 export default function PhotoStripDrag({ photos, onStripPhotosChange }) {
-  const [stripPhotos, setStripPhotos] = useState(Array(8).fill(null));
-  const [draggedIndex, setDraggedIndex] = useState(null);
-  const [draggedFromStrip, setDraggedFromStrip] = useState(false);
+  const [stripPhotos, setStripPhotos] = useState(Array(4).fill(null));
 
   // Initialize stripPhotos with photos when component mounts or photos change
   useEffect(() => {
-    const initial = Array(8).fill(null);
+    const initial = Array(4).fill(null);
     photos.forEach((photo, index) => {
-      if (index < 8) {
+      if (index < 4) {
         initial[index] = photo;
       }
     });
@@ -20,9 +18,12 @@ export default function PhotoStripDrag({ photos, onStripPhotosChange }) {
   }, [photos]);
 
   const handleDragStart = (e, photoIndex, fromStrip = false) => {
-    setDraggedIndex(photoIndex);
-    setDraggedFromStrip(fromStrip);
     e.dataTransfer.effectAllowed = "move";
+    if (fromStrip) {
+      e.dataTransfer.setData("text/plain", `strip-${photoIndex}`);
+    } else {
+      e.dataTransfer.setData("text/plain", `photo-${photoIndex}`);
+    }
   };
 
   const handleDragOver = (e) => {
@@ -32,27 +33,29 @@ export default function PhotoStripDrag({ photos, onStripPhotosChange }) {
 
   const handleDrop = (e, targetIndex) => {
     e.preventDefault();
-
-    if (draggedFromStrip) {
+    
+    const data = e.dataTransfer.getData("text/plain");
+    
+    if (data.startsWith("strip-")) {
       // Moving within strip
+      const sourceIndex = parseInt(data.replace("strip-", ""));
       const newStripPhotos = [...stripPhotos];
-      const draggedPhoto = stripPhotos[draggedIndex];
-      newStripPhotos[draggedIndex] = stripPhotos[targetIndex];
+      const draggedPhoto = stripPhotos[sourceIndex];
+      newStripPhotos[sourceIndex] = stripPhotos[targetIndex];
       newStripPhotos[targetIndex] = draggedPhoto;
       setStripPhotos(newStripPhotos);
       onStripPhotosChange(newStripPhotos);
-    } else {
+    } else if (data.startsWith("photo-")) {
       // Dropping from photo gallery
-      if (draggedIndex !== null && draggedIndex < photos.length) {
+      const photoIndex = parseInt(data.replace("photo-", ""));
+      if (photoIndex < photos.length) {
         const newStripPhotos = [...stripPhotos];
-        newStripPhotos[targetIndex] = photos[draggedIndex];
+        newStripPhotos[targetIndex] = photos[photoIndex];
         setStripPhotos(newStripPhotos);
         onStripPhotosChange(newStripPhotos);
       }
     }
 
-    setDraggedIndex(null);
-    setDraggedFromStrip(false);
   };
 
   const handleRemoveFromStrip = (index) => {
@@ -65,12 +68,12 @@ export default function PhotoStripDrag({ photos, onStripPhotosChange }) {
   return (
     <Card>
       <CardBody className="p-3">
-        <h4 className="text-sm font-semibold mb-2">Photo Strip (8 khung)</h4>
+        <h4 className="text-sm font-semibold mb-2">Photo Strip (4 khung)</h4>
         <p className="text-xs text-gray-600 mb-3">Kéo ảnh vào các khung</p>
 
-        {/* Compact 8 Frames Grid */}
+        {/* Compact 4 Frames Vertical (1x4) */}
         <div className="bg-green-50 rounded-lg p-2">
-          <div className="grid grid-cols-2 gap-1.5">
+          <div className="grid grid-cols-1 gap-2">
             {stripPhotos.map((photo, index) => (
               <div
                 key={index}
