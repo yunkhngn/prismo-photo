@@ -18,13 +18,7 @@ export function ExportView() {
     // Use FRAMES constant for now, or storeFrames if populated
     const availableFrames = FRAMES
 
-    const handleCustomFrameUpload = (e) => {
-        const file = e.target.files?.[0]
-        if (file) {
-            const url = URL.createObjectURL(file)
-            setCustomFrame(url)
-        }
-    }
+
 
     const handleDownload = () => {
         if (canvasRef.current) {
@@ -53,22 +47,12 @@ export function ExportView() {
                     />
                 </ClayCard>
 
-                <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleCustomFrameUpload}
-                    accept="image/*"
-                    className="hidden"
-                />
+
 
                 <div className="flex flex-col sm:flex-row gap-3 w-full max-w-[320px]">
                     <ClayButton variant="ghost" onClick={() => setStep('CAPTURE')} className="hover:bg-slate-100 flex-1">
                         <ArrowLeft className="w-4 h-4 mr-2" />
                         Back
-                    </ClayButton>
-                    <ClayButton onClick={() => fileInputRef.current?.click()} variant="secondary" className="shadow-[4px_4px_0px_0px_#2D3748] hover:shadow-[2px_2px_0px_0px_#2D3748] hover:translate-y-1 transition-all flex-1">
-                        <Upload className="w-4 h-4 mr-2" />
-                        Custom
                     </ClayButton>
                 </div>
                 <ClayButton onClick={handleDownload} size="lg" variant="success" className="w-full max-w-[320px] shadow-[4px_4px_0px_0px_#2D3748] hover:shadow-[2px_2px_0px_0px_#2D3748] hover:translate-y-1 transition-all">
@@ -78,38 +62,40 @@ export function ExportView() {
             </div>
 
             {/* Right: Frame Selection */}
-            <div className="lg:col-span-8">
-                <ClayCard className="p-6 h-full">
-                    <h2 className="text-2xl font-bold mb-4">Choose a Frame</h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-h-[600px] overflow-y-auto p-2">
-                        {availableFrames.map((frame) => (
-                            <div
-                                key={frame.id}
-                                onClick={() => setFrame(frame.id === 'none' ? null : frame.id)}
-                                className={cn(
-                                    "aspect-[1/3] rounded-2xl border-[3px] flex flex-col items-center justify-center cursor-pointer transition-all duration-200 group p-2",
-                                    (selectedFrameId === frame.id || (!selectedFrameId && frame.id === 'none'))
-                                        ? "bg-white border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] translate-y-1"
-                                        : "bg-white border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_#2D3748]"
-                                )}
-                            >
-                                <div className={cn(
-                                    "w-full flex-1 rounded-xl overflow-hidden border-2",
-                                    (selectedFrameId === frame.id || (!selectedFrameId && frame.id === 'none'))
-                                        ? "border-[#FFCFE3] ring-2 ring-[#FFCFE3] ring-offset-1"
-                                        : "border-slate-100 group-hover:border-[#FFCFE3]"
-                                )}>
-                                    {frame.thumbnailPath ? (
-                                        <img src={frame.thumbnailPath} alt={frame.name} className="w-full h-full object-contain bg-slate-50" />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center bg-slate-50 text-slate-400 font-medium">None</div>
+            <div className="lg:col-span-8 lg:relative min-h-[500px] lg:min-h-0">
+                <div className="lg:absolute lg:inset-0">
+                    <ClayCard className="p-6 h-full flex flex-col">
+                        <h2 className="text-2xl font-bold mb-4 flex-shrink-0">Choose a Frame</h2>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 overflow-y-auto p-6 flex-grow min-h-0 -mx-6">
+                            {availableFrames.map((frame) => (
+                                <div
+                                    key={frame.id}
+                                    onClick={() => setFrame(frame.id === 'none' ? null : frame.id)}
+                                    className={cn(
+                                        "aspect-[1/3] rounded-2xl border-[3px] flex flex-col items-center justify-center cursor-pointer transition-all duration-200 group p-2",
+                                        (selectedFrameId === frame.id || (!selectedFrameId && frame.id === 'none'))
+                                            ? "bg-white border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] translate-y-1"
+                                            : "bg-white border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_#2D3748]"
                                     )}
+                                >
+                                    <div className={cn(
+                                        "w-full flex-1 rounded-xl overflow-hidden border-2",
+                                        (selectedFrameId === frame.id || (!selectedFrameId && frame.id === 'none'))
+                                            ? "border-[#FFCFE3] ring-2 ring-[#FFCFE3] ring-offset-1"
+                                            : "border-slate-100 group-hover:border-[#FFCFE3]"
+                                    )}>
+                                        {frame.thumbnailPath ? (
+                                            <img src={frame.thumbnailPath} alt={frame.name} className="w-full h-full object-contain bg-slate-50" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center bg-slate-50 text-slate-400 font-medium">None</div>
+                                        )}
+                                    </div>
+                                    <div className="mt-3 text-sm font-bold text-[#2D3748]">{frame.name}</div>
                                 </div>
-                                <div className="mt-3 text-sm font-bold text-[#2D3748]">{frame.name}</div>
-                            </div>
-                        ))}
-                    </div>
-                </ClayCard>
+                            ))}
+                        </div>
+                    </ClayCard>
+                </div>
             </div>
         </div>
     )
