@@ -1,0 +1,8 @@
+<svg width="600" height="1800" viewBox="0 0 600 1800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="600" height="1800" stroke="#FFCFE3" stroke-width="40" />
+  <circle cx="50" cy="50" r="20" fill="#FFCFE3" />
+  <circle cx="550" cy="50" r="20" fill="#FFCFE3" />
+  <circle cx="50" cy="1750" r="20" fill="#FFCFE3" />
+  <circle cx="550" cy="1750" r="20" fill="#FFCFE3" />
+  <text x="300" y="1780" text-anchor="middle" fill="#FFCFE3" font-family="Arial" font-size="24" font-weight="bold">Prismo Booth</text>
+</svg>
