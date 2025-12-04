@@ -17,9 +17,9 @@ export function Navbar() {
     ]
 
     return (
-        <nav className="w-full py-4">
+        <nav className="w-full py-4 sticky top-0 z-50 pointer-events-none">
             <div className="max-w-6xl mx-auto px-4 md:px-8">
-                <div className="bg-white border-[3px] border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] rounded-2xl px-8 py-5 flex items-center justify-between transition-all hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_#2D3748]">
+                <div className="bg-white border-[3px] border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] rounded-2xl px-8 py-5 flex items-center justify-between transition-all hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_#2D3748] pointer-events-auto">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-3 group">
                         <div className="w-10 h-10 bg-[#FFCFE3] rounded-xl border-[3px] border-[#2D3748] flex items-center justify-center font-black text-xl shadow-[3px_3px_0px_0px_#2D3748] group-hover:-translate-y-0.5 group-hover:shadow-[4px_4px_0px_0px_#2D3748] transition-all">

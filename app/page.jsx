@@ -63,7 +63,7 @@ export default function Home() {
           {/* Right Column: Visual */}
           <div className="relative hidden lg:block">
             {/* Main Card */}
-            <div className="relative z-10 bg-white rounded-[32px] border-[3px] border-[#2D3748] shadow-[8px_8px_0px_0px_#2D3748] p-6 w-full max-w-md mx-auto rotate-1 hover:rotate-0 transition-transform duration-300">
+            <div className="relative z-10 bg-white rounded-2xl border-[3px] border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] p-6 w-full max-w-md mx-auto rotate-1 hover:rotate-0 transition-transform duration-300">
 
               {/* Card Header */}
               <div className="flex items-start gap-4 mb-6">
@@ -133,7 +133,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Card 1: Privacy */}
-            <div className="bg-white rounded-[32px] border-[3px] border-[#2D3748] shadow-[8px_8px_0px_0px_#2D3748] p-8 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_#2D3748] transition-all duration-300">
+            <div className="bg-white rounded-2xl border-[3px] border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] p-8 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_#2D3748] transition-all duration-300">
               <div className="flex items-start justify-between mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-[#FFCFE3] border-[3px] border-[#2D3748] flex items-center justify-center shadow-[2px_2px_0px_0px_#2D3748]">
                   <Target className="w-8 h-8 text-[#2D3748]" />
@@ -152,7 +152,7 @@ export default function Home() {
             </div>
 
             {/* Card 2: Instant */}
-            <div className="bg-white rounded-[32px] border-[3px] border-[#2D3748] shadow-[8px_8px_0px_0px_#2D3748] p-8 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_#2D3748] transition-all duration-300">
+            <div className="bg-white rounded-2xl border-[3px] border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] p-8 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_#2D3748] transition-all duration-300">
               <div className="flex items-start justify-between mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-[#BDE7FF] border-[3px] border-[#2D3748] flex items-center justify-center shadow-[2px_2px_0px_0px_#2D3748]">
                   <Image className="w-8 h-8 text-[#2D3748]" />
@@ -171,7 +171,7 @@ export default function Home() {
             </div>
 
             {/* Card 3: Style */}
-            <div className="bg-white rounded-[32px] border-[3px] border-[#2D3748] shadow-[8px_8px_0px_0px_#2D3748] p-8 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_#2D3748] transition-all duration-300">
+            <div className="bg-white rounded-2xl border-[3px] border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] p-8 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_#2D3748] transition-all duration-300">
               <div className="flex items-start justify-between mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-[#E9D5FF] border-[3px] border-[#2D3748] flex items-center justify-center shadow-[2px_2px_0px_0px_#2D3748]">
                   <Star className="w-8 h-8 text-[#2D3748]" />
@@ -190,7 +190,7 @@ export default function Home() {
             </div>
 
             {/* Card 4: Export */}
-            <div className="bg-white rounded-[32px] border-[3px] border-[#2D3748] shadow-[8px_8px_0px_0px_#2D3748] p-8 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_#2D3748] transition-all duration-300">
+            <div className="bg-white rounded-2xl border-[3px] border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] p-8 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_#2D3748] transition-all duration-300">
               <div className="flex items-start justify-between mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-[#FDE047] border-[3px] border-[#2D3748] flex items-center justify-center shadow-[2px_2px_0px_0px_#2D3748]">
                   <Camera className="w-8 h-8 text-[#2D3748]" />
@@ -222,7 +222,7 @@ export default function Home() {
       {/* CTA Section */}
       <section className="w-full py-20 bg-[#BDE7FF]">
         <div className="max-w-4xl mx-auto px-4 md:px-8">
-          <div className="hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_#2D3748] transition-all duration-300 bg-white rounded-[32px] border-[3px] border-[#2D3748] shadow-[8px_8px_0px_0px_#2D3748] p-8 md:p-12 text-center">
+          <div className="hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_#2D3748] transition-all duration-300 bg-white rounded-2xl border-[3px] border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] p-8 md:p-12 text-center">
             <h2 className="text-3xl md:text-5xl font-black text-[#2D3748] mb-4">
               Ready to Capture Moments?
             </h2>
