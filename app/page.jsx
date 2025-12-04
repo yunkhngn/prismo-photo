@@ -133,7 +133,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Card 1: Privacy */}
-            <div className="bg-white rounded-[32px] border-[3px] border-[#2D3748] shadow-[8px_8px_0px_0px_#2D3748] p-8 hover:-translate-y-1 transition-transform duration-300">
+            <div className="bg-white rounded-[32px] border-[3px] border-[#2D3748] shadow-[8px_8px_0px_0px_#2D3748] p-8 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_#2D3748] transition-all duration-300">
               <div className="flex items-start justify-between mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-[#FFCFE3] border-[3px] border-[#2D3748] flex items-center justify-center shadow-[2px_2px_0px_0px_#2D3748]">
                   <Target className="w-8 h-8 text-[#2D3748]" />
@@ -152,7 +152,7 @@ export default function Home() {
             </div>
 
             {/* Card 2: Instant */}
-            <div className="bg-white rounded-[32px] border-[3px] border-[#2D3748] shadow-[8px_8px_0px_0px_#2D3748] p-8 hover:-translate-y-1 transition-transform duration-300">
+            <div className="bg-white rounded-[32px] border-[3px] border-[#2D3748] shadow-[8px_8px_0px_0px_#2D3748] p-8 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_#2D3748] transition-all duration-300">
               <div className="flex items-start justify-between mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-[#BDE7FF] border-[3px] border-[#2D3748] flex items-center justify-center shadow-[2px_2px_0px_0px_#2D3748]">
                   <Image className="w-8 h-8 text-[#2D3748]" />
@@ -171,7 +171,7 @@ export default function Home() {
             </div>
 
             {/* Card 3: Style */}
-            <div className="bg-white rounded-[32px] border-[3px] border-[#2D3748] shadow-[8px_8px_0px_0px_#2D3748] p-8 hover:-translate-y-1 transition-transform duration-300">
+            <div className="bg-white rounded-[32px] border-[3px] border-[#2D3748] shadow-[8px_8px_0px_0px_#2D3748] p-8 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_#2D3748] transition-all duration-300">
               <div className="flex items-start justify-between mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-[#E9D5FF] border-[3px] border-[#2D3748] flex items-center justify-center shadow-[2px_2px_0px_0px_#2D3748]">
                   <Star className="w-8 h-8 text-[#2D3748]" />
@@ -190,7 +190,7 @@ export default function Home() {
             </div>
 
             {/* Card 4: Export */}
-            <div className="bg-white rounded-[32px] border-[3px] border-[#2D3748] shadow-[8px_8px_0px_0px_#2D3748] p-8 hover:-translate-y-1 transition-transform duration-300">
+            <div className="bg-white rounded-[32px] border-[3px] border-[#2D3748] shadow-[8px_8px_0px_0px_#2D3748] p-8 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_#2D3748] transition-all duration-300">
               <div className="flex items-start justify-between mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-[#FDE047] border-[3px] border-[#2D3748] flex items-center justify-center shadow-[2px_2px_0px_0px_#2D3748]">
                   <Camera className="w-8 h-8 text-[#2D3748]" />
@@ -215,6 +215,49 @@ export default function Home() {
                 Start Creating Now <ArrowRight className="ml-2 w-5 h-5" />
               </Link>
             </ClayButton>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="w-full py-20 bg-[#BDE7FF]">
+        <div className="max-w-4xl mx-auto px-4 md:px-8">
+          <div className="hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_#2D3748] transition-all duration-300 bg-white rounded-[32px] border-[3px] border-[#2D3748] shadow-[8px_8px_0px_0px_#2D3748] p-8 md:p-12 text-center">
+            <h2 className="text-3xl md:text-5xl font-black text-[#2D3748] mb-4">
+              Ready to Capture Moments?
+            </h2>
+            <p className="text-lg md:text-xl text-slate-600 font-bold mb-8 max-w-2xl mx-auto">
+              Join thousands of users and start your creative journey today. First 100 photos are completely free!
+            </p>
+
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
+              <ClayButton variant="success" size="lg" className="h-14 px-8 text-lg rounded-2xl border-[3px] shadow-[4px_4px_0px_0px_#2D3748] w-full md:w-auto" asChild>
+                <Link href="/photobooth">
+                  Start for Free <ArrowRight className="ml-2 w-5 h-5" />
+                </Link>
+              </ClayButton>
+
+              <ClayButton variant="secondary" size="lg" className="h-14 px-8 text-lg rounded-2xl border-[3px] shadow-[4px_4px_0px_0px_#2D3748] w-full md:w-auto" asChild>
+                <Link href="/frames">
+                  Browse Frames
+                </Link>
+              </ClayButton>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm font-bold text-slate-500">
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 rounded-full bg-[#86EFAC] flex items-center justify-center">
+                  <ArrowRight className="w-3 h-3 text-[#2D3748]" />
+                </div>
+                No login required
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 rounded-full bg-[#86EFAC] flex items-center justify-center">
+                  <ArrowRight className="w-3 h-3 text-[#2D3748]" />
+                </div>
+                100% Free
+              </div>
+            </div>
           </div>
         </div>
       </section>

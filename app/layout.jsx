@@ -17,6 +17,7 @@ export const metadata = {
 };
 
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
 export default function RootLayout({
   children,
@@ -24,10 +25,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${nunito.variable} ${geistMono.variable} antialiased bg-[#FFF7EC] min-h-screen`}
+        className={`${nunito.variable} ${geistMono.variable} antialiased bg-[#fff9f5] min-h-screen`}
       >
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );

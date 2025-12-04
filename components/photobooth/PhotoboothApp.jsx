@@ -57,7 +57,7 @@ export function PhotoboothApp() {
     const allSlotsFilled = slots.every(s => s.imageUrl)
 
     return (
-        <div className="min-h-screen bg-[#FFF7EC] p-4 md:p-8 font-sans text-[#2D3748]">
+        <div className="min-h-screen bg-[#fff9f5] p-4 md:p-8 font-sans text-[#2D3748]">
             <PrivacyDialog />
 
             <header className="max-w-6xl mx-auto mb-8 flex items-center justify-between">
