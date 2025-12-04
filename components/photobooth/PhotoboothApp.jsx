@@ -61,7 +61,7 @@ export function PhotoboothApp() {
             <PrivacyDialog />
 
             {/* Toolbar / Header Controls */}
-            <div className="max-w-6xl mx-auto mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="max-w-6xl mx-auto px-4 md:px-8 mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-2">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#BDE7FF] border-2 border-[#2D3748] shadow-[2px_2px_0px_0px_#2D3748]">
                         <span className="text-xs font-extrabold text-[#2D3748] uppercase tracking-wider">Photobooth Mode</span>
@@ -86,7 +86,7 @@ export function PhotoboothApp() {
             </div>
 
             {currentStep === 'CAPTURE' ? (
-                <main className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <main className="max-w-6xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
                     {/* Left Column: Main Action Area (Camera or Preview) */}
                     <div className="lg:col-span-8 flex flex-col gap-6">
                         <CameraView
@@ -125,7 +125,7 @@ export function PhotoboothApp() {
                     </div>
                 </main>
             ) : (
-                <main className="max-w-6xl mx-auto">
+                <main className="max-w-6xl mx-auto px-4 md:px-8">
                     <ExportView />
                 </main>
             )}
