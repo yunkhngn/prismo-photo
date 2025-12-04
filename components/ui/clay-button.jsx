@@ -4,17 +4,17 @@ import { cva } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const clayButtonVariants = cva(
-    "inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-bold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:translate-y-[4px] active:shadow-none",
+    "inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-bold ring-offset-background transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-2 border-slate-900 active:translate-y-[4px] active:shadow-none",
     {
         variants: {
             variant: {
                 primary:
-                    "bg-[#FFCFE3] text-slate-900 shadow-[0px_6px_0px_rgba(15,23,42,0.15)] hover:bg-[#FFD9E8]",
+                    "bg-[#FFCFE3] text-slate-900 shadow-[0px_4px_0px_0px_#0f172a] hover:bg-[#FFD9E8] hover:-translate-y-[1px] hover:shadow-[0px_5px_0px_0px_#0f172a] active:translate-y-[4px]",
                 secondary:
-                    "bg-[#BDE7FF] text-slate-900 shadow-[0px_6px_0px_rgba(15,23,42,0.15)] hover:bg-[#C9ECFF]",
+                    "bg-[#BDE7FF] text-slate-900 shadow-[0px_4px_0px_0px_#0f172a] hover:bg-[#C9ECFF] hover:-translate-y-[1px] hover:shadow-[0px_5px_0px_0px_#0f172a] active:translate-y-[4px]",
                 success:
-                    "bg-[#22C55E] text-white shadow-[0px_6px_0px_rgba(15,23,42,0.2)] hover:bg-[#28D166]",
-                ghost: "hover:bg-accent hover:text-accent-foreground",
+                    "bg-[#22C55E] text-white shadow-[0px_4px_0px_0px_#0f172a] hover:bg-[#28D166] hover:-translate-y-[1px] hover:shadow-[0px_5px_0px_0px_#0f172a] active:translate-y-[4px]",
+                ghost: "border-transparent shadow-none hover:bg-slate-100 active:translate-y-0 active:shadow-none",
             },
             size: {
                 default: "h-12 px-8 py-2",
