@@ -11,7 +11,7 @@ import { FilterSelector } from "./FilterSelector"
 import { ExportView } from "./ExportView"
 
 export function PhotoboothApp() {
-    const { currentStep, slots, updateSlot, setStep } = usePhotoboothStore()
+    const { currentStep, slots, updateSlot, setStep, countdownDuration } = usePhotoboothStore()
     const [isCapturing, setIsCapturing] = React.useState(false)
     const [isAutoMode, setIsAutoMode] = React.useState(false)
 
@@ -103,7 +103,7 @@ export function PhotoboothApp() {
                             <div className="relative">
                                 <select
                                     className="appearance-none bg-white pl-4 pr-10 py-4 rounded-2xl border-[3px] border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] font-bold text-[#2D3748] focus:outline-none cursor-pointer hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_#2D3748] transition-all h-full"
-                                    value={usePhotoboothStore(state => state.countdownDuration)}
+                                    value={countdownDuration}
                                     onChange={(e) => usePhotoboothStore.getState().setCountdownDuration(Number(e.target.value))}
                                 >
                                     <option value={3}>3s Timer</option>
