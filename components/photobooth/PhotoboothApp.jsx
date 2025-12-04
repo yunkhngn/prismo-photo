@@ -60,27 +60,30 @@ export function PhotoboothApp() {
         <div className="min-h-screen bg-[#fff9f5] p-4 md:p-8 font-sans text-[#2D3748]">
             <PrivacyDialog />
 
-            <header className="max-w-6xl mx-auto mb-8 flex items-center justify-between">
+            {/* Toolbar / Header Controls */}
+            <div className="max-w-6xl mx-auto mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-2">
-                    <h1 className="text-2xl font-extrabold tracking-tight">Prismo Booth</h1>
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#BDE7FF] border-2 border-[#2D3748] shadow-[2px_2px_0px_0px_#2D3748]">
+                        <span className="text-xs font-extrabold text-[#2D3748] uppercase tracking-wider">Photobooth Mode</span>
+                    </div>
                 </div>
-                <div className="flex gap-2 items-center">
-                    <div className="flex items-center gap-2 mr-4 bg-white/50 px-3 py-1 rounded-full border border-slate-200">
+
+                <div className="flex gap-4 items-center">
+                    <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl border-[3px] border-[#2D3748] shadow-[2px_2px_0px_0px_#2D3748]">
                         <label className="text-sm font-bold text-slate-600 cursor-pointer select-none" htmlFor="video-recap">Video Recap</label>
                         <input
                             id="video-recap"
                             type="checkbox"
                             className="toggle toggle-primary h-5 w-5 accent-[#FFCFE3] cursor-pointer"
-                        // For MVP just a visual toggle or connected to store if needed
                         />
                     </div>
                     {currentStep === 'CAPTURE' && allSlotsFilled && (
-                        <ClayButton onClick={() => setStep('EXPORT')} variant="success" className="animate-in fade-in zoom-in">
+                        <ClayButton onClick={() => setStep('EXPORT')} variant="success" className="animate-in fade-in zoom-in shadow-[4px_4px_0px_0px_#2D3748]">
                             Next Step →
                         </ClayButton>
                     )}
                 </div>
-            </header>
+            </div>
 
             {currentStep === 'CAPTURE' ? (
                 <main className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -91,23 +94,27 @@ export function PhotoboothApp() {
                             onCapture={handleCapture}
                         />
 
-                        <FilterSelector />
+                        <div className="bg-white rounded-2xl border-[3px] border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] p-4">
+                            <FilterSelector />
+                        </div>
 
                         <div className="flex justify-center gap-4">
                             <ClayButton
                                 size="lg"
                                 onClick={triggerManualCapture}
                                 disabled={isCapturing || allSlotsFilled}
+                                className="w-full md:w-auto px-8 py-6 text-xl shadow-[4px_4px_0px_0px_#2D3748]"
                             >
-                                Manual
+                                Manual Capture
                             </ClayButton>
                             <ClayButton
                                 variant="secondary"
                                 size="lg"
                                 onClick={triggerAutoCapture}
                                 disabled={isCapturing || allSlotsFilled}
+                                className="w-full md:w-auto px-8 py-6 text-xl shadow-[4px_4px_0px_0px_#2D3748]"
                             >
-                                AUTO
+                                Auto Mode
                             </ClayButton>
                         </div>
                     </div>

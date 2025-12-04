@@ -5,7 +5,7 @@ import { ArrowRight, Image, Book, Target, Star, Camera } from "lucide-react";
 export default function Home() {
   return (
     <div>
-      <main className="min-h-screen max-w-6xl mx-auto px-4 md:px-8 flex flex-col">
+      <main className="max-w-6xl mx-auto px-4 md:px-8 flex flex-col">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full py-12">
 
           {/* Left Column: Content */}
@@ -19,8 +19,7 @@ export default function Home() {
             {/* Headline */}
             <h1 className="text-5xl md:text-7xl font-black text-[#2D3748] leading-[1.1] tracking-tight">
               Prismo <br />
-              <span className="text-[#22C55E]">Photobooth,</span> <br />
-              Capture Your Perfect Moments!
+              <span className="text-[#22C55E]">Photobooth</span>
             </h1>
 
             {/* Description */}
@@ -119,9 +118,9 @@ export default function Home() {
       </main>
 
       {/* Why Prismo Section */}
-      <section className="w-full py-20 bg-[#FFF9F5]">
+      <section className="w-full py-15 bg-[#FFF9F5]">
         <div className="max-w-6xl mx-auto px-4 md:px-8">
-          <div className="flex flex-col items-center text-center mb-16">
+          <div className="flex flex-col items-center text-center mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#BDE7FF] border-2 border-[#2D3748] shadow-[2px_2px_0px_0px_#2D3748] mb-6">
               <span className="text-xs font-extrabold text-[#2D3748] uppercase tracking-wider">Why Choose Us</span>
             </div>
