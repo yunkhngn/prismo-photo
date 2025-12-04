@@ -28,6 +28,7 @@ export const usePhotoboothStore = create((set, get) => ({
   // Flags
   isPrivacyAccepted: false,
   isVideoRecapEnabled: false,
+  countdownDuration: 3,
   
   // Actions
   setStep: (step) => set({ currentStep: step }),
@@ -65,4 +66,6 @@ export const usePhotoboothStore = create((set, get) => ({
   toggleVideoRecap: () => set((state) => ({ 
     isVideoRecapEnabled: !state.isVideoRecapEnabled 
   })),
+
+  setCountdownDuration: (duration) => set({ countdownDuration: duration }),
 }));

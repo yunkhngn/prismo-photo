@@ -11,7 +11,7 @@ import { usePhotoboothStore } from '@/store/usePhotoboothStore'
 
 export function CameraView({ onCapture, isAutoMode = false, isCapturing = false }) {
     const { videoRef, startCamera, permissionStatus, captureImage } = useCamera()
-    const { activeFilterId } = usePhotoboothStore()
+    const { activeFilterId, countdownDuration } = usePhotoboothStore()
     const [countdown, setCountdown] = useState(null)
 
     const activeFilter = FILTERS.find(f => f.id === activeFilterId) || FILTERS[0]
@@ -28,7 +28,7 @@ export function CameraView({ onCapture, isAutoMode = false, isCapturing = false 
     }, [isCapturing])
 
     const startCountdown = () => {
-        setCountdown(3)
+        setCountdown(countdownDuration)
     }
 
     useEffect(() => {

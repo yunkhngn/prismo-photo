@@ -94,16 +94,34 @@ export function PhotoboothApp() {
                             onCapture={handleCapture}
                         />
 
-                        <div className="bg-white rounded-2xl border-[3px] border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] p-4">
+                        <ClayCard className="p-4">
                             <FilterSelector />
-                        </div>
+                        </ClayCard>
 
-                        <div className="flex justify-center gap-4">
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+                            {/* Timer Dropdown */}
+                            <div className="relative">
+                                <select
+                                    className="appearance-none bg-white pl-4 pr-10 py-4 rounded-2xl border-[3px] border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] font-bold text-[#2D3748] focus:outline-none cursor-pointer hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_#2D3748] transition-all h-full"
+                                    value={usePhotoboothStore(state => state.countdownDuration)}
+                                    onChange={(e) => usePhotoboothStore.getState().setCountdownDuration(Number(e.target.value))}
+                                >
+                                    <option value={3}>3s Timer</option>
+                                    <option value={5}>5s Timer</option>
+                                    <option value={10}>10s Timer</option>
+                                </select>
+                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                    <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1.41 0.589996L6 5.17L10.59 0.589996L12 2L6 8L0 2L1.41 0.589996Z" fill="#2D3748" />
+                                    </svg>
+                                </div>
+                            </div>
+
                             <ClayButton
                                 size="lg"
                                 onClick={triggerManualCapture}
                                 disabled={isCapturing || allSlotsFilled}
-                                className="w-full md:w-auto px-8 py-6 text-xl shadow-[4px_4px_0px_0px_#2D3748]"
+                                className="w-full md:w-auto px-8 py-4 text-lg shadow-[4px_4px_0px_0px_#2D3748] bg-[#FFCFE3] hover:bg-[#FFCFE3]/90"
                             >
                                 Manual Capture
                             </ClayButton>
@@ -112,7 +130,7 @@ export function PhotoboothApp() {
                                 size="lg"
                                 onClick={triggerAutoCapture}
                                 disabled={isCapturing || allSlotsFilled}
-                                className="w-full md:w-auto px-8 py-6 text-xl shadow-[4px_4px_0px_0px_#2D3748]"
+                                className="w-full md:w-auto px-8 py-4 text-lg shadow-[4px_4px_0px_0px_#2D3748] bg-[#BDE7FF] hover:bg-[#BDE7FF]/90"
                             >
                                 Auto Mode
                             </ClayButton>
@@ -120,7 +138,7 @@ export function PhotoboothApp() {
                     </div>
 
                     {/* Right Column: Sidebar (Slots or Frame Selection) */}
-                    <div className="lg:col-span-4 flex flex-col gap-6 h-[600px]">
+                    <div className="lg:col-span-4 flex flex-col gap-6 h-full">
                         <SlotSidebar />
                     </div>
                 </main>
