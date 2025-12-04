@@ -43,13 +43,13 @@ export function ExportView() {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-full">
             {/* Left: Preview */}
-            <div className="lg:col-span-5 flex flex-col items-center gap-6">
-                <ClayCard className="p-4 bg-slate-100 flex items-center justify-center shadow-inner">
+            <div className="lg:col-span-4 flex flex-col items-center gap-6">
+                <ClayCard className="p-3 bg-slate-100 flex items-center justify-center shadow-inner w-fit">
                     <CanvasRenderer
                         ref={canvasRef}
                         width={300}
                         height={900}
-                        className="shadow-lg rounded-sm"
+                        className="shadow-lg rounded-sm max-w-full h-auto"
                     />
                 </ClayCard>
 
@@ -61,24 +61,24 @@ export function ExportView() {
                     className="hidden"
                 />
 
-                <div className="flex gap-4">
-                    <ClayButton variant="ghost" onClick={() => setStep('CAPTURE')}>
+                <div className="flex flex-col sm:flex-row gap-3 w-full max-w-[320px]">
+                    <ClayButton variant="ghost" onClick={() => setStep('CAPTURE')} className="hover:bg-slate-100 flex-1">
                         <ArrowLeft className="w-4 h-4 mr-2" />
                         Back
                     </ClayButton>
-                    <ClayButton onClick={() => fileInputRef.current?.click()} variant="secondary">
+                    <ClayButton onClick={() => fileInputRef.current?.click()} variant="secondary" className="shadow-[4px_4px_0px_0px_#2D3748] hover:shadow-[2px_2px_0px_0px_#2D3748] hover:translate-y-1 transition-all flex-1">
                         <Upload className="w-4 h-4 mr-2" />
-                        Custom Frame
-                    </ClayButton>
-                    <ClayButton onClick={handleDownload} size="lg" variant="success">
-                        <Download className="w-4 h-4 mr-2" />
-                        Download
+                        Custom
                     </ClayButton>
                 </div>
+                <ClayButton onClick={handleDownload} size="lg" variant="success" className="w-full max-w-[320px] shadow-[4px_4px_0px_0px_#2D3748] hover:shadow-[2px_2px_0px_0px_#2D3748] hover:translate-y-1 transition-all">
+                    <Download className="w-4 h-4 mr-2" />
+                    Download Photo
+                </ClayButton>
             </div>
 
             {/* Right: Frame Selection */}
-            <div className="lg:col-span-7">
+            <div className="lg:col-span-8">
                 <ClayCard className="p-6 h-full">
                     <h2 className="text-2xl font-bold mb-4">Choose a Frame</h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-h-[600px] overflow-y-auto p-2">
@@ -87,18 +87,25 @@ export function ExportView() {
                                 key={frame.id}
                                 onClick={() => setFrame(frame.id === 'none' ? null : frame.id)}
                                 className={cn(
-                                    "aspect-[1/3] bg-slate-50 rounded-lg border-2 flex flex-col items-center justify-center cursor-pointer transition-all hover:scale-105",
+                                    "aspect-[1/3] rounded-2xl border-[3px] flex flex-col items-center justify-center cursor-pointer transition-all duration-200 group p-2",
                                     (selectedFrameId === frame.id || (!selectedFrameId && frame.id === 'none'))
-                                        ? "border-[#FFCFE3] shadow-[0_0_0_4px_rgba(255,207,227,0.4)]"
-                                        : "border-slate-200 hover:border-[#FFCFE3]"
+                                        ? "bg-white border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] translate-y-1"
+                                        : "bg-white border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_#2D3748]"
                                 )}
                             >
-                                {frame.thumbnailPath ? (
-                                    <img src={frame.thumbnailPath} alt={frame.name} className="w-full h-full object-contain p-2" />
-                                ) : (
-                                    <span className="text-slate-400 font-medium">None</span>
-                                )}
-                                <div className="mt-2 text-sm font-bold text-slate-700">{frame.name}</div>
+                                <div className={cn(
+                                    "w-full flex-1 rounded-xl overflow-hidden border-2",
+                                    (selectedFrameId === frame.id || (!selectedFrameId && frame.id === 'none'))
+                                        ? "border-[#FFCFE3] ring-2 ring-[#FFCFE3] ring-offset-1"
+                                        : "border-slate-100 group-hover:border-[#FFCFE3]"
+                                )}>
+                                    {frame.thumbnailPath ? (
+                                        <img src={frame.thumbnailPath} alt={frame.name} className="w-full h-full object-contain bg-slate-50" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center bg-slate-50 text-slate-400 font-medium">None</div>
+                                    )}
+                                </div>
+                                <div className="mt-3 text-sm font-bold text-[#2D3748]">{frame.name}</div>
                             </div>
                         ))}
                     </div>
