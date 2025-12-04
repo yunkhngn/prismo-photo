@@ -4,6 +4,7 @@ import React, { useRef } from 'react'
 import { usePhotoboothStore } from '@/store/usePhotoboothStore'
 import { CanvasRenderer } from './CanvasRenderer'
 import { ClayCard } from '@/components/ui/clay-card'
+import { ClayButton } from '@/components/ui/clay-button'
 import { Download, ArrowLeft, Upload } from 'lucide-react'
 import { cn } from '@/lib/utils'
 

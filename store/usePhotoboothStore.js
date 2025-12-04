@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { DEFAULT_LAYOUTS } from '@/lib/layouts';
+import { FRAMES } from '@/lib/frames';
 
 // Helper to initialize slots based on layout
 const createSlotsForLayout = (layoutId) => {
@@ -14,14 +15,14 @@ const createSlotsForLayout = (layoutId) => {
 export const usePhotoboothStore = create((set, get) => ({
   // Config
   layouts: DEFAULT_LAYOUTS,
-  frames: [], // Will be populated later or via another config
+  frames: FRAMES, // Initialize with default frames
   
   // Initial State
   currentStep: 'CAPTURE',
   activeLayoutId: DEFAULT_LAYOUTS[0].id,
   slots: createSlotsForLayout(DEFAULT_LAYOUTS[0].id),
   activeFilterId: null,
-  selectedFrameId: null,
+  selectedFrameId: 'frame-1',
   customFrameUrl: null,
   
   // Flags

@@ -102,7 +102,7 @@ export function PhotoboothApp() {
                                 onClick={triggerManualCapture}
                                 disabled={isCapturing || allSlotsFilled}
                             >
-                                Chụp tay
+                                Manual
                             </ClayButton>
                             <ClayButton
                                 variant="secondary"
