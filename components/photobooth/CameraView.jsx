@@ -62,7 +62,7 @@ export function CameraView({ onCapture, isAutoMode = false, isCapturing = false 
             {permissionStatus === 'denied' ? (
                 <div className="text-center p-6 bg-white/90 rounded-xl">
                     <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-2" />
-                    <p className="font-bold text-slate-900">Camera Access Denied</p>
+                    <p className="font-bold text-[#2D3748]">Camera Access Denied</p>
                     <p className="text-sm text-slate-600">Please allow camera access or upload photos manually.</p>
                 </div>
             ) : (

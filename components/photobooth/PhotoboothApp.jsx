@@ -57,14 +57,11 @@ export function PhotoboothApp() {
     const allSlotsFilled = slots.every(s => s.imageUrl)
 
     return (
-        <div className="min-h-screen bg-[#FFF7EC] p-4 md:p-8 font-sans text-slate-900">
+        <div className="min-h-screen bg-[#FFF7EC] p-4 md:p-8 font-sans text-[#2D3748]">
             <PrivacyDialog />
 
             <header className="max-w-6xl mx-auto mb-8 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 bg-[#FFCFE3] rounded-full border-2 border-slate-900 flex items-center justify-center font-bold text-xl shadow-[2px_2px_0px_rgba(15,23,42,1)]">
-                        P
-                    </div>
                     <h1 className="text-2xl font-extrabold tracking-tight">Prismo Booth</h1>
                 </div>
                 <div className="flex gap-2 items-center">

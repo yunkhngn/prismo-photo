@@ -34,7 +34,7 @@ export function PrivacyDialog() {
                     <DialogTitle className="text-2xl font-bold text-center mb-2">Welcome to Prismo Booth! 📸</DialogTitle>
                     <DialogDescription className="text-center text-base">
                         We respect your privacy. All photos are processed locally in your browser and are
-                        <span className="font-bold text-slate-900"> never uploaded to our servers</span>.
+                        <span className="font-bold text-[#2D3748]"> never uploaded to our servers</span>.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex justify-center py-6">
