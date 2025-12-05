@@ -109,6 +109,12 @@ export function CameraView({ onCapture, isCapturing = false }) {
         }
     }, [isCapturing, countdown, startCountdown])
 
+    // Use ref for onCapture to avoid effect re-triggering when parent re-renders
+    const onCaptureRef = React.useRef(onCapture)
+    useEffect(() => {
+        onCaptureRef.current = onCapture
+    }, [onCapture])
+
     useEffect(() => {
         if (countdown === null) return
 
@@ -145,12 +151,14 @@ export function CameraView({ onCapture, isCapturing = false }) {
                 ctx.drawImage(video, 0, 0)
 
                 const imageData = canvas.toDataURL('image/png')
-                onCapture(imageData)
+                if (onCaptureRef.current) {
+                    onCaptureRef.current(imageData)
+                }
             }
             // Defer state update to avoid synchronous render warning
             setTimeout(() => setCountdown(null), 0)
         }
-    }, [countdown, captureImage, onCapture, activeFilter.css, videoRef])
+    }, [countdown, activeFilter.css, videoRef])
 
     return (
         <ClayCard className="relative aspect-video bg-black overflow-hidden flex items-center justify-center">

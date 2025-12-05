@@ -1,6 +1,7 @@
 "use client"
 
 import { FRAMES } from "@/lib/frames"
+import { usePhotoboothStore } from "@/store/usePhotoboothStore"
 import { ClayCard } from "@/components/ui/clay-card"
 import { ClayButton } from "@/components/ui/clay-button"
 import { ArrowRight, Sparkles, Lightbulb, Palette } from "lucide-react"
@@ -48,7 +49,7 @@ export default function FramePage() {
                                     </span>
                                 </div>
 
-                                <Link href="/photobooth" className="block">
+                                <Link href="/photobooth" className="block" onClick={() => usePhotoboothStore.getState().setFrame(frame.id)}>
                                     <ClayButton className="w-full group-hover:translate-y-[-2px] group-hover:shadow-[6px_6px_0px_0px_#2D3748] transition-all">
                                         Use this Frame <ArrowRight className="w-4 h-4 ml-2" />
                                     </ClayButton>

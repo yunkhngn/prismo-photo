@@ -138,12 +138,12 @@ const CanvasRenderer = forwardRef(({
         // 3. Draw Timestamp
         const date = new Date().toLocaleString()
         const text = new fabric.Text(date, {
-            left: width / 2,
-            top: height - 20,
+            left: 20 * scale,
+            top: height - 20 * scale,
             fontSize: 12 * scale,
             fontFamily: 'Arial',
             fill: '#333',
-            originX: 'center',
+            originX: 'left',
             selectable: false
         })
         canvas.add(text)
