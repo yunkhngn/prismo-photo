@@ -53,8 +53,8 @@ export function Footer() {
                 <div className="mt-20 pt-8 border-t-2 border-[#2D3748]/10 flex flex-col md:flex-row items-center justify-between gap-4">
                     <p className="text-slate-400 font-bold text-sm">© 2025 Prismo Photobooth. All rights reserved.</p>
                     <div className="flex items-center gap-8">
-                        <Link href="#" className="text-slate-400 font-bold text-sm hover:text-[#2D3748]">Privacy Policy</Link>
-                        <Link href="#" className="text-slate-400 font-bold text-sm hover:text-[#2D3748]">Terms of Service</Link>
+                        <Link href="/privacy" className="text-slate-400 font-bold text-sm hover:text-[#2D3748]">Privacy Policy</Link>
+                        <Link href="/terms" className="text-slate-400 font-bold text-sm hover:text-[#2D3748]">Terms of Service</Link>
                     </div>
                 </div>
             </div>

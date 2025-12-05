@@ -46,6 +46,7 @@ export default function AboutPage() {
                     <ClayCard className="max-w-2xl mx-auto p-8 flex flex-col md:flex-row items-center gap-8">
                         <div className="relative">
                             <div className="w-32 h-32 rounded-full border-[4px] border-[#2D3748] overflow-hidden shadow-[4px_4px_0px_0px_#2D3748]">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                     src="https://github.com/yunkhngn.png"
                                     alt="yunkhngn"

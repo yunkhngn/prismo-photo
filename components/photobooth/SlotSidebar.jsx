@@ -55,6 +55,7 @@ export function SlotSidebar() {
                     >
                         {slot.imageUrl ? (
                             <>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                     src={slot.imageUrl}
                                     alt={`Slot ${index + 1}`}

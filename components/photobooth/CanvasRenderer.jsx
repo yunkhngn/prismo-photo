@@ -3,7 +3,6 @@
 import React, { useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
 import * as fabric from 'fabric' // v6 syntax
 import { usePhotoboothStore } from '@/store/usePhotoboothStore'
-import { FILTERS } from './FilterSelector'
 
 const CanvasRenderer = forwardRef(({
     width = 300,
@@ -155,7 +154,7 @@ const CanvasRenderer = forwardRef(({
     // Trigger render when dependencies change
     useEffect(() => {
         renderCanvas()
-    }, [activeLayoutId, slots, activeFilterId, selectedFrameId, customFrameUrl, width, height])
+    }, [activeLayoutId, slots, activeFilterId, selectedFrameId, customFrameUrl, width, height]) // eslint-disable-line react-hooks/exhaustive-deps
 
     // Expose export method
     useImperativeHandle(ref, () => ({

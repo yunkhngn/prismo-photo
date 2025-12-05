@@ -5,15 +5,14 @@ import { usePhotoboothStore } from '@/store/usePhotoboothStore'
 import { CanvasRenderer } from './CanvasRenderer'
 import { ClayCard } from '@/components/ui/clay-card'
 import { ClayButton } from '@/components/ui/clay-button'
-import { Download, ArrowLeft, Upload, Play, Pause, X } from 'lucide-react'
+import { Download, ArrowLeft, Play, Pause } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 import { FRAMES } from '@/lib/frames'
 
 export function ExportView() {
-    const { setStep, selectedFrameId, setFrame, frames: storeFrames, setCustomFrame } = usePhotoboothStore()
+    const { setStep, selectedFrameId, setFrame } = usePhotoboothStore()
     const canvasRef = useRef(null)
-    const fileInputRef = useRef(null)
 
     // Use FRAMES constant for now, or storeFrames if populated
     const availableFrames = FRAMES
@@ -88,6 +87,7 @@ export function ExportView() {
                                         "w-full flex-1 rounded-xl overflow-hidden border-2 border-slate-100"
                                     )}>
                                         {frame.thumbnailPath ? (
+                                            /* eslint-disable-next-line @next/next/no-img-element */
                                             <img src={frame.thumbnailPath} alt={frame.name} className="w-full h-full object-contain bg-slate-50" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center bg-slate-50 text-slate-400 font-medium">None</div>

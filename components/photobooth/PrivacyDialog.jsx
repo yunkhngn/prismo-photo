@@ -49,7 +49,7 @@ export function PrivacyDialog() {
 
                 <DialogFooter className="sm:justify-center w-full">
                     <ClayButton onClick={handleAccept} variant="success" size="lg" className="w-full h-14 text-lg shadow-[4px_4px_0px_0px_#2D3748]">
-                        I Understand, Let's Go!
+                        I Understand, Let&apos;s Go!
                     </ClayButton>
                 </DialogFooter>
             </DialogContent>

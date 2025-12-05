@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ClayButton } from "@/components/ui/clay-button";
-import { ArrowRight, Image, Book, Target, Star, Camera } from "lucide-react";
+import { ArrowRight, Image as ImageIcon, Book, Target, Star, Camera } from "lucide-react";
 
 export default function Home() {
   return (
@@ -67,7 +67,7 @@ export default function Home() {
               {/* Card Header */}
               <div className="flex items-start gap-4 mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-[#BDE7FF] border-[3px] border-[#2D3748] flex items-center justify-center shadow-[2px_2px_0px_0px_#2D3748]">
-                  <Image className="w-8 h-8 text-[#2D3748] fill-[#2D3748]" />
+                  <ImageIcon className="w-8 h-8 text-[#2D3748] fill-[#2D3748]" />
                 </div>
                 <div>
                   <h3 className="text-xl font-black text-[#2D3748]">Captured Moments</h3>
@@ -154,7 +154,7 @@ export default function Home() {
             <div className="bg-white rounded-2xl border-[3px] border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] p-8 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_#2D3748] transition-all duration-300">
               <div className="flex items-start justify-between mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-[#BDE7FF] border-[3px] border-[#2D3748] flex items-center justify-center shadow-[2px_2px_0px_0px_#2D3748]">
-                  <Image className="w-8 h-8 text-[#2D3748]" />
+                  <ImageIcon className="w-8 h-8 text-[#2D3748]" />
                 </div>
                 <div className="px-3 py-1 rounded-full border-2 border-[#2D3748] bg-[#BDE7FF] text-xs font-black text-[#2D3748] uppercase">
                   Fast

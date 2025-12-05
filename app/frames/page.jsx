@@ -5,7 +5,6 @@ import { ClayCard } from "@/components/ui/clay-card"
 import { ClayButton } from "@/components/ui/clay-button"
 import { ArrowRight, Sparkles, Lightbulb, Palette } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
 
 export default function FramePage() {
     // Filter out 'none' frame for the library view
@@ -32,6 +31,7 @@ export default function FramePage() {
                     {displayFrames.map((frame) => (
                         <ClayCard key={frame.id} className="flex flex-col p-4 group">
                             <div className="aspect-[1/3] bg-slate-100 rounded-xl overflow-hidden border-2 border-slate-200 mb-4 relative group-hover:border-[#FFCFE3] transition-colors">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                     src={frame.thumbnailPath}
                                     alt={frame.name}
@@ -68,7 +68,7 @@ export default function FramePage() {
                             <div className="flex-1">
                                 <h2 className="text-3xl font-black text-[#2D3748] mb-3">Have a brilliant idea?</h2>
                                 <p className="text-lg text-slate-600 mb-6 font-medium">
-                                    We'd love to hear your thoughts! If you have a specific frame design in mind, drop us a suggestion.
+                                    We&apos;d love to hear your thoughts! If you have a specific frame design in mind, drop us a suggestion.
                                 </p>
                                 <ClayButton size="lg" className="bg-[#FFCFE3] hover:bg-[#FFCFE3]/90 text-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748]">
                                     <Sparkles className="w-5 h-5 mr-2" />

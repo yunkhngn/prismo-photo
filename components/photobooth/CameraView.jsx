@@ -3,14 +3,13 @@
 import React, { useEffect, useState } from 'react'
 import { useCamera } from '@/hooks/useCamera'
 import { ClayCard } from '@/components/ui/clay-card'
-import { ClayButton } from '@/components/ui/clay-button'
-import { CameraIcon, AlertCircle } from 'lucide-react'
+import { AlertCircle } from 'lucide-react'
 
 import { FILTERS } from './FilterSelector'
 import { usePhotoboothStore } from '@/store/usePhotoboothStore'
 
-export function CameraView({ onCapture, isAutoMode = false, isCapturing = false }) {
-    const { videoRef, startCamera, permissionStatus, captureImage } = useCamera()
+export function CameraView({ onCapture, isCapturing = false }) {
+    const { videoRef, startCamera, permissionStatus, captureImage, stream } = useCamera()
     const { activeFilterId, countdownDuration } = usePhotoboothStore()
     const [countdown, setCountdown] = useState(null)
 
@@ -27,29 +26,29 @@ export function CameraView({ onCapture, isAutoMode = false, isCapturing = false 
     // Video Recording Logic
     // Video Recording Logic
     useEffect(() => {
-        if (!isVideoRecapEnabled || !videoRef.current || !videoRef.current.srcObject) return
+        if (!isVideoRecapEnabled || !stream) return
 
         const video = videoRef.current
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d')
-        let animationFrameId
         let intervalId
 
         // Set canvas size to match video
         const setupCanvas = () => {
+            if (!video) return
             canvas.width = video.videoWidth
             canvas.height = video.videoHeight
         }
 
-        if (video.readyState >= 2) {
+        if (video && video.readyState >= 2) {
             setupCanvas()
-        } else {
+        } else if (video) {
             video.onloadedmetadata = setupCanvas
         }
 
         // Draw to canvas at 15 FPS
         const drawFrame = () => {
-            if (canvas.width === 0 || canvas.height === 0) return
+            if (!video || canvas.width === 0 || canvas.height === 0) return
 
             ctx.filter = activeFilter.css !== 'none' ? activeFilter.css : 'none'
 
@@ -63,12 +62,12 @@ export function CameraView({ onCapture, isAutoMode = false, isCapturing = false 
         intervalId = setInterval(drawFrame, 1000 / 5) // 5 FPS
 
         // Capture stream from canvas
-        const stream = canvas.captureStream(5)
+        const streamCanvas = canvas.captureStream(5)
 
         // Prefer MP4, fallback to WebM
         const mimeType = MediaRecorder.isTypeSupported('video/mp4') ? 'video/mp4' : 'video/webm'
 
-        const mediaRecorder = new MediaRecorder(stream, {
+        const mediaRecorder = new MediaRecorder(streamCanvas, {
             mimeType,
             videoBitsPerSecond: 1000000 // 1 Mbps
         })
@@ -96,18 +95,18 @@ export function CameraView({ onCapture, isAutoMode = false, isCapturing = false 
                 mediaRecorder.stop()
             }
         }
-    }, [isVideoRecapEnabled, videoRef.current?.srcObject, setRecordedVideoBlob, activeFilter.css])
+    }, [isVideoRecapEnabled, stream, setRecordedVideoBlob, activeFilter.css, videoRef])
 
     // Handle external capture trigger
+    const startCountdown = React.useCallback(() => {
+        setCountdown(countdownDuration)
+    }, [countdownDuration])
+
     useEffect(() => {
         if (isCapturing && countdown === null) {
             startCountdown()
         }
-    }, [isCapturing])
-
-    const startCountdown = () => {
-        setCountdown(countdownDuration)
-    }
+    }, [isCapturing, countdown, startCountdown])
 
     useEffect(() => {
         if (countdown === null) return
@@ -149,7 +148,7 @@ export function CameraView({ onCapture, isAutoMode = false, isCapturing = false 
             }
             setCountdown(null)
         }
-    }, [countdown, captureImage, onCapture])
+    }, [countdown, captureImage, onCapture, activeFilter.css, videoRef])
 
     return (
         <ClayCard className="relative aspect-video bg-black overflow-hidden flex items-center justify-center">
