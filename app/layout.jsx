@@ -45,7 +45,10 @@ export const metadata = {
     creator: "@yunkhngn",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' }
+    ],
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },

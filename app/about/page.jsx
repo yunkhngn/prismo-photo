@@ -2,7 +2,7 @@
 
 import { ClayCard } from "@/components/ui/clay-card"
 import { ClayButton } from "@/components/ui/clay-button"
-import { Github, Twitter, Coffee, Heart } from "lucide-react"
+import { Github, Facebook, Coffee, Heart } from "lucide-react"
 import Link from "next/link"
 
 export default function AboutPage() {
@@ -53,14 +53,14 @@ export default function AboutPage() {
                                 />
                             </div>
                             <div className="absolute -bottom-2 -right-2 bg-[#FFCFE3] border-[3px] border-[#2D3748] p-2 rounded-xl shadow-[2px_2px_0px_0px_#2D3748]">
-                                <span className="text-2xl">👨‍💻</span>
+                                <span className="text-2xl"><Coffee className="w-6 h-6" /></span>
                             </div>
                         </div>
 
                         <div className="flex-1 text-center md:text-left space-y-4">
                             <div>
                                 <h3 className="text-2xl font-black text-[#2D3748]">yunkhngn</h3>
-                                <p className="text-slate-500 font-bold">Lead Developer & Designer</p>
+                                <p className="text-slate-500 font-bold">Developer & Designer</p>
                             </div>
 
                             <p className="text-slate-600">
@@ -75,10 +75,10 @@ export default function AboutPage() {
                                         GitHub
                                     </ClayButton>
                                 </Link>
-                                <Link href="https://twitter.com" target="_blank">
+                                <Link href="https://facebook.com/yun.khngn" target="_blank">
                                     <ClayButton size="sm" variant="secondary" className="px-4 bg-[#BDE7FF]">
-                                        <Twitter className="w-4 h-4 mr-2" />
-                                        Twitter
+                                        <Facebook className="w-4 h-4 mr-2" />
+                                        Facebook
                                     </ClayButton>
                                 </Link>
                             </div>
