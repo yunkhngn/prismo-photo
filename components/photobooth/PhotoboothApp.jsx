@@ -11,7 +11,7 @@ import { FilterSelector } from "./FilterSelector"
 import { ExportView } from "./ExportView"
 
 export function PhotoboothApp() {
-    const { currentStep, slots, updateSlot, setStep, countdownDuration } = usePhotoboothStore()
+    const { currentStep, slots, updateSlot, setStep, countdownDuration, isVideoRecapEnabled } = usePhotoboothStore()
     const [isCapturing, setIsCapturing] = React.useState(false)
     const [isAutoMode, setIsAutoMode] = React.useState(false)
 
@@ -69,14 +69,18 @@ export function PhotoboothApp() {
                 </div>
 
                 <div className="flex gap-4 items-center">
-                    <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl border-[3px] border-[#2D3748] shadow-[2px_2px_0px_0px_#2D3748]">
-                        <label className="text-sm font-bold text-slate-600 cursor-pointer select-none" htmlFor="video-recap">Video Recap</label>
-                        <input
-                            id="video-recap"
-                            type="checkbox"
-                            className="toggle toggle-primary h-5 w-5 accent-[#FFCFE3] cursor-pointer"
-                        />
-                    </div>
+                    {currentStep === 'CAPTURE' && (
+                        <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl border-[3px] border-[#2D3748] shadow-[2px_2px_0px_0px_#2D3748]">
+                            <label className="text-sm font-bold text-slate-600 cursor-pointer select-none" htmlFor="video-recap">Video Recap</label>
+                            <input
+                                id="video-recap"
+                                type="checkbox"
+                                className="toggle toggle-primary h-5 w-5 accent-[#FFCFE3] cursor-pointer"
+                                checked={isVideoRecapEnabled}
+                                onChange={() => usePhotoboothStore.getState().toggleVideoRecap()}
+                            />
+                        </div>
+                    )}
                     {currentStep === 'CAPTURE' && allSlotsFilled && (
                         <ClayButton onClick={() => setStep('EXPORT')} variant="success" className="animate-in fade-in zoom-in shadow-[4px_4px_0px_0px_#2D3748]">
                             Next Step →

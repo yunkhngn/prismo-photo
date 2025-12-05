@@ -5,7 +5,7 @@ import { usePhotoboothStore } from '@/store/usePhotoboothStore'
 import { CanvasRenderer } from './CanvasRenderer'
 import { ClayCard } from '@/components/ui/clay-card'
 import { ClayButton } from '@/components/ui/clay-button'
-import { Download, ArrowLeft, Upload } from 'lucide-react'
+import { Download, ArrowLeft, Upload, Play, Pause, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 import { FRAMES } from '@/lib/frames'
@@ -59,6 +59,12 @@ export function ExportView() {
                     <Download className="w-4 h-4 mr-2" />
                     Download Photo
                 </ClayButton>
+
+                {usePhotoboothStore(state => state.recordedVideoBlob) && (
+                    <ClayCard className="w-full max-w-[320px] p-0 overflow-hidden bg-black aspect-video relative group mt-2">
+                        <VideoPlayer blob={usePhotoboothStore.getState().recordedVideoBlob} />
+                    </ClayCard>
+                )}
             </div>
 
             {/* Right: Frame Selection */}
@@ -79,10 +85,7 @@ export function ExportView() {
                                     )}
                                 >
                                     <div className={cn(
-                                        "w-full flex-1 rounded-xl overflow-hidden border-2",
-                                        (selectedFrameId === frame.id || (!selectedFrameId && frame.id === 'none'))
-                                            ? "border-[#FFCFE3] ring-2 ring-[#FFCFE3] ring-offset-1"
-                                            : "border-slate-100 group-hover:border-[#FFCFE3]"
+                                        "w-full flex-1 rounded-xl overflow-hidden border-2 border-slate-100"
                                     )}>
                                         {frame.thumbnailPath ? (
                                             <img src={frame.thumbnailPath} alt={frame.name} className="w-full h-full object-contain bg-slate-50" />
@@ -98,5 +101,87 @@ export function ExportView() {
                 </div>
             </div>
         </div>
+    )
+}
+
+function VideoPlayer({ blob }) {
+    const videoRef = useRef(null)
+    const [isPlaying, setIsPlaying] = React.useState(true)
+    const [url, setUrl] = React.useState(null)
+
+    React.useEffect(() => {
+        if (blob) {
+            const newUrl = URL.createObjectURL(blob)
+            setUrl(newUrl)
+            return () => URL.revokeObjectURL(newUrl)
+        }
+    }, [blob])
+
+    const togglePlay = () => {
+        if (videoRef.current) {
+            if (isPlaying) {
+                videoRef.current.pause()
+            } else {
+                videoRef.current.play()
+            }
+            setIsPlaying(!isPlaying)
+        }
+    }
+
+    const handleDownload = () => {
+        if (url && blob) {
+            const a = document.createElement('a')
+            a.href = url
+            const ext = blob.type.includes('mp4') ? 'mp4' : 'webm'
+            a.download = `prismo-recap-${Date.now()}.${ext}`
+            a.click()
+        }
+    }
+
+    if (!url) return null
+
+    return (
+        <>
+            <video
+                ref={videoRef}
+                src={url}
+                className="w-full h-full object-contain"
+                autoPlay
+                loop
+                playsInline
+                onClick={togglePlay}
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
+            />
+
+            {/* Custom Controls Overlay */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                {!isPlaying && (
+                    <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center animate-in zoom-in duration-200">
+                        <Play className="w-8 h-8 text-white fill-white" />
+                    </div>
+                )}
+            </div>
+
+            {/* Bottom Controls Bar */}
+            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <button
+                    onClick={togglePlay}
+                    className="p-2 hover:bg-white/20 rounded-full text-white transition-colors"
+                >
+                    {isPlaying ? <Pause className="w-6 h-6 fill-white" /> : <Play className="w-6 h-6 fill-white" />}
+                </button>
+
+                <ClayButton
+                    size="sm"
+                    variant="success"
+                    onClick={handleDownload}
+                    className="shadow-[2px_2px_0px_0px_#2D3748] active:translate-y-1 active:shadow-none"
+                >
+                    <Download className="w-4 h-4 mr-2" />
+                    Save Video
+                </ClayButton>
+            </div>
+        </>
     )
 }

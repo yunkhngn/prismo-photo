@@ -16,9 +16,87 @@ export function CameraView({ onCapture, isAutoMode = false, isCapturing = false 
 
     const activeFilter = FILTERS.find(f => f.id === activeFilterId) || FILTERS[0]
 
+    const { isVideoRecapEnabled, setRecordedVideoBlob } = usePhotoboothStore()
+    const mediaRecorderRef = React.useRef(null)
+    const chunksRef = React.useRef([])
+
     useEffect(() => {
         startCamera()
     }, [startCamera])
+
+    // Video Recording Logic
+    // Video Recording Logic
+    useEffect(() => {
+        if (!isVideoRecapEnabled || !videoRef.current || !videoRef.current.srcObject) return
+
+        const video = videoRef.current
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        let animationFrameId
+        let intervalId
+
+        // Set canvas size to match video
+        const setupCanvas = () => {
+            canvas.width = video.videoWidth
+            canvas.height = video.videoHeight
+        }
+
+        if (video.readyState >= 2) {
+            setupCanvas()
+        } else {
+            video.onloadedmetadata = setupCanvas
+        }
+
+        // Draw to canvas at 15 FPS
+        const drawFrame = () => {
+            if (canvas.width === 0 || canvas.height === 0) return
+
+            ctx.filter = activeFilter.css !== 'none' ? activeFilter.css : 'none'
+
+            // Mirror effect
+            ctx.translate(canvas.width, 0)
+            ctx.scale(-1, 1)
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+            ctx.setTransform(1, 0, 0, 1, 0, 0) // Reset transform
+        }
+
+        intervalId = setInterval(drawFrame, 1000 / 5) // 5 FPS
+
+        // Capture stream from canvas
+        const stream = canvas.captureStream(5)
+
+        // Prefer MP4, fallback to WebM
+        const mimeType = MediaRecorder.isTypeSupported('video/mp4') ? 'video/mp4' : 'video/webm'
+
+        const mediaRecorder = new MediaRecorder(stream, {
+            mimeType,
+            videoBitsPerSecond: 1000000 // 1 Mbps
+        })
+
+        mediaRecorderRef.current = mediaRecorder
+        chunksRef.current = []
+
+        mediaRecorder.ondataavailable = (e) => {
+            if (e.data.size > 0) {
+                chunksRef.current.push(e.data)
+            }
+        }
+
+        mediaRecorder.onstop = () => {
+            const blob = new Blob(chunksRef.current, { type: mimeType })
+            // Store the mimeType too if needed, but blob has it
+            setRecordedVideoBlob(blob)
+        }
+
+        mediaRecorder.start()
+
+        return () => {
+            clearInterval(intervalId)
+            if (mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop()
+            }
+        }
+    }, [isVideoRecapEnabled, videoRef.current?.srcObject, setRecordedVideoBlob, activeFilter.css])
 
     // Handle external capture trigger
     useEffect(() => {
@@ -49,8 +127,24 @@ export function CameraView({ onCapture, isAutoMode = false, isCapturing = false 
             // For now, let's capture raw and store the filterId with the slot.
             // The SlotSidebar and CanvasRenderer will apply the filter.
 
-            const imageData = captureImage()
-            if (imageData) {
+            // Capture with filter and mirror
+            if (videoRef.current) {
+                const video = videoRef.current
+                const canvas = document.createElement('canvas')
+                canvas.width = video.videoWidth
+                canvas.height = video.videoHeight
+                const ctx = canvas.getContext('2d')
+
+                // Apply Filter
+                ctx.filter = activeFilter.css !== 'none' ? activeFilter.css : 'none'
+
+                // Mirror
+                ctx.translate(canvas.width, 0)
+                ctx.scale(-1, 1)
+
+                ctx.drawImage(video, 0, 0)
+
+                const imageData = canvas.toDataURL('image/png')
                 onCapture(imageData)
             }
             setCountdown(null)

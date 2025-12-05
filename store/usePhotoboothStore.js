@@ -68,4 +68,7 @@ export const usePhotoboothStore = create((set, get) => ({
   })),
 
   setCountdownDuration: (duration) => set({ countdownDuration: duration }),
+  
+  recordedVideoBlob: null,
+  setRecordedVideoBlob: (blob) => set({ recordedVideoBlob: blob }),
 }));
