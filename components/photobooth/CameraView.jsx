@@ -104,7 +104,8 @@ export function CameraView({ onCapture, isCapturing = false }) {
 
     useEffect(() => {
         if (isCapturing && countdown === null) {
-            startCountdown()
+            // Defer state update to avoid synchronous render warning
+            setTimeout(() => startCountdown(), 0)
         }
     }, [isCapturing, countdown, startCountdown])
 
@@ -146,7 +147,8 @@ export function CameraView({ onCapture, isCapturing = false }) {
                 const imageData = canvas.toDataURL('image/png')
                 onCapture(imageData)
             }
-            setCountdown(null)
+            // Defer state update to avoid synchronous render warning
+            setTimeout(() => setCountdown(null), 0)
         }
     }, [countdown, captureImage, onCapture, activeFilter.css, videoRef])
 

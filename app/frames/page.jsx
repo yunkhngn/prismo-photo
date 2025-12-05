@@ -70,10 +70,11 @@ export default function FramePage() {
                                 <p className="text-lg text-slate-600 mb-6 font-medium">
                                     We&apos;d love to hear your thoughts! If you have a specific frame design in mind, drop us a suggestion.
                                 </p>
-                                <ClayButton size="lg" className="bg-[#FFCFE3] hover:bg-[#FFCFE3]/90 text-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748]">
-                                    <Sparkles className="w-5 h-5 mr-2" />
-                                    Submit Request
-                                </ClayButton>
+                                <Link href="https://github.com/yunkhngn/prismo-photo">
+                                    <ClayButton size="lg" className="bg-[#FFCFE3] hover:bg-[#FFCFE3]/90 text-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748]">
+                                        Contribute to repository
+                                    </ClayButton>
+                                </Link>
                             </div>
                         </div>
 

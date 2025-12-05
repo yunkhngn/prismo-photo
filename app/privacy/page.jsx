@@ -12,7 +12,7 @@ export default function PrivacyPage() {
                 <div className="text-center space-y-4 mb-12">
                     <h1 className="text-4xl md:text-5xl font-black text-[#2D3748]">Privacy Policy</h1>
                     <p className="text-xl text-slate-600 font-medium">
-                        Your privacy is our top priority. Here's how we handle your data.
+                        Your privacy is our top priority. Here&apos;s how we handle your data.
                     </p>
                 </div>
 
@@ -40,7 +40,7 @@ export default function PrivacyPage() {
                             <h3 className="text-xl font-black">Data Collection</h3>
                         </div>
                         <p className="text-slate-600 font-medium">
-                            We do not collect any personal information. We don't use cookies for tracking or analytics. The only data stored is your local preferences (like selected frame) which stays on your device.
+                            We do not collect any personal information. We don&apos;t use cookies for tracking or analytics. The only data stored is your local preferences (like selected frame) which stays on your device.
                         </p>
                     </ClayCard>
 
@@ -61,7 +61,7 @@ export default function PrivacyPage() {
                         Third-Party Services
                     </h3>
                     <p className="text-slate-600 font-medium mb-4">
-                        This website is hosted on Vercel. Please refer to Vercel's privacy policy for information regarding their server logs and data handling.
+                        This website is hosted on Vercel. Please refer to Vercel&apos;s privacy policy for information regarding their server logs and data handling.
                     </p>
                     <p className="text-slate-600 font-medium">
                         We use no other third-party analytics or tracking services.
