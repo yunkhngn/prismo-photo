@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { Lightbulb, Palette, Camera, Sparkles } from "lucide-react"
 import { usePhotoboothStore } from "@/store/usePhotoboothStore"
 import { PrivacyDialog } from "./PrivacyDialog"
 import { ClayCard } from "@/components/ui/clay-card"
@@ -57,7 +58,7 @@ export function PhotoboothApp() {
     const allSlotsFilled = slots.every(s => s.imageUrl)
 
     return (
-        <div className="min-h-screen bg-[#fff9f5] p-4 md:p-8 font-sans text-[#2D3748]">
+        <div className="min-h-screen bg-[#fff9f5] font-sans text-[#2D3748] py-8">
             <PrivacyDialog />
 
             {/* Toolbar / Header Controls */}
@@ -92,7 +93,7 @@ export function PhotoboothApp() {
             {currentStep === 'CAPTURE' ? (
                 <main className="max-w-6xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
                     {/* Left Column: Main Action Area (Camera or Preview) */}
-                    <div className="lg:col-span-8 flex flex-col gap-6">
+                    <div className="lg:col-span-8 flex flex-col gap-6 h-full">
                         <CameraView
                             isCapturing={isCapturing}
                             onCapture={handleCapture}
@@ -139,6 +140,38 @@ export function PhotoboothApp() {
                                 Auto Mode
                             </ClayButton>
                         </div>
+
+                        {/* Tips Card */}
+                        <ClayCard className="p-6 flex-grow flex flex-col justify-center gap-4 bg-[#fff9f5] border-dashed border-4 border-[#FFCFE3] shadow-none hover:shadow-none hover:translate-y-0">
+                            <h3 className="text-xl font-black text-[#2D3748] uppercase tracking-wide text-center flex items-center justify-center gap-2">
+                                <Sparkles className="w-5 h-5 text-[#2D3748]" />
+                                Pro Tips
+                                <Sparkles className="w-5 h-5 text-[#2D3748]" />
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                                <div className="flex flex-col items-center">
+                                    <div className="font-bold text-[#2D3748] mb-1 flex items-center gap-2">
+                                        <Lightbulb className="w-4 h-4" />
+                                        Lighting
+                                    </div>
+                                    <p className="text-sm text-slate-600">Find a well-lit spot for the best quality photos.</p>
+                                </div>
+                                <div className="flex flex-col items-center">
+                                    <div className="font-bold text-[#2D3748] mb-1 flex items-center gap-2">
+                                        <Palette className="w-4 h-4" />
+                                        Filters
+                                    </div>
+                                    <p className="text-sm text-slate-600">Try different filters to set the mood!</p>
+                                </div>
+                                <div className="flex flex-col items-center">
+                                    <div className="font-bold text-[#2D3748] mb-1 flex items-center gap-2">
+                                        <Camera className="w-4 h-4" />
+                                        Posing
+                                    </div>
+                                    <p className="text-sm text-slate-600">Have fun and experiment with different poses.</p>
+                                </div>
+                            </div>
+                        </ClayCard>
                     </div>
 
                     {/* Right Column: Sidebar (Slots or Frame Selection) */}

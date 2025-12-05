@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Camera, Facebook, Instagram, Github, PanelsTopLeft } from "lucide-react";
+import { Play, Facebook, Instagram, Github, PanelsTopLeft } from "lucide-react";
 
 export function Footer() {
     const socialLink = [
@@ -14,11 +14,11 @@ export function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                     {/* Brand */}
                     <div className="flex flex-col gap-6">
-                        <Link href="/" className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-[#FFCFE3] rounded-xl border-[3px] border-[#2D3748] flex items-center justify-center font-black text-xl shadow-[3px_3px_0px_0px_#2D3748]">
-                                <Camera className="w-6 h-6 text-[#2D3748]" />
+                        <Link href="/" className="flex items-center gap-3 group">
+                            <div className="w-10 h-10 bg-[#FFCFE3] rounded-xl border-[3px] border-[#2D3748] flex items-center justify-center font-black text-xl shadow-[3px_3px_0px_0px_#2D3748] group-hover:-translate-y-0.5 group-hover:shadow-[4px_4px_0px_0px_#2D3748] transition-all">
+                                <Play className="w-6 h-6 text-[#2D3748]" />
                             </div>
-                            <span className="font-black text-xl tracking-tight text-[#2D3748]">Prismo</span>
+                            <span className="font-black text-xl tracking-tight text-[#2D3748]">Prismo Photobooth</span>
                         </Link>
                         <p className="text-slate-500 font-bold leading-relaxed">
                             Empowering everyone to capture and share their best moments with style and ease.

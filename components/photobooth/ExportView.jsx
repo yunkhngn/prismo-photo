@@ -37,7 +37,7 @@ export function ExportView() {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-full">
             {/* Left: Preview */}
-            <div className="lg:col-span-4 flex flex-col items-center gap-6">
+            <div className="lg:col-span-6 flex flex-col items-center justify-center bg-slate-100/50 rounded-3xl border-2 border-dashed border-slate-300 p-8 relative group">
                 <ClayCard className="p-3 bg-slate-100 flex items-center justify-center shadow-inner w-fit">
                     <CanvasRenderer
                         ref={canvasRef}
@@ -67,8 +67,8 @@ export function ExportView() {
                 )}
             </div>
 
-            {/* Right: Frame Selection */}
-            <div className="lg:col-span-8 lg:relative min-h-[500px] lg:min-h-0">
+            {/* Right Column: Frame Selection & Actions */}
+            <div className="lg:col-span-6 flex flex-col gap-6 lg:relative min-h-[500px] lg:min-h-0">
                 <div className="lg:absolute lg:inset-0">
                     <ClayCard className="p-6 h-full flex flex-col">
                         <h2 className="text-2xl font-bold mb-4 flex-shrink-0">Choose a Frame</h2>

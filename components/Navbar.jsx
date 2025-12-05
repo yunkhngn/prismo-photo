@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { ClayButton } from "@/components/ui/clay-button"
-import { Camera } from "lucide-react"
+import { Play } from "lucide-react"
 
 export function Navbar() {
     const pathname = usePathname()
@@ -23,7 +23,7 @@ export function Navbar() {
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-3 group">
                         <div className="w-10 h-10 bg-[#FFCFE3] rounded-xl border-[3px] border-[#2D3748] flex items-center justify-center font-black text-xl shadow-[3px_3px_0px_0px_#2D3748] group-hover:-translate-y-0.5 group-hover:shadow-[4px_4px_0px_0px_#2D3748] transition-all">
-                            <Camera />
+                            <Play className="w-6 h-6 text-[#2D3748]" />
                         </div>
                         <span className="font-black text-xl tracking-tight text-[#2D3748]">Prismo Photobooth</span>
                     </Link>

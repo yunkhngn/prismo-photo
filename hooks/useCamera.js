@@ -5,8 +5,22 @@ export function useCamera() {
   const [stream, setStream] = useState(null);
   const [error, setError] = useState(null);
   const [permissionStatus, setPermissionStatus] = useState('prompt'); // 'prompt', 'granted', 'denied'
+  
+  // Use a ref to track the stream for reliable cleanup
+  const streamRef = useRef(null);
+
+  const stopCamera = useCallback(() => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
+    setStream(null);
+  }, []);
 
   const startCamera = useCallback(async () => {
+    // Stop any existing stream first
+    stopCamera();
+
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: {
@@ -17,6 +31,7 @@ export function useCamera() {
         audio: false
       });
       
+      streamRef.current = mediaStream;
       setStream(mediaStream);
       setPermissionStatus('granted');
       
@@ -28,17 +43,10 @@ export function useCamera() {
       setError(err);
       setPermissionStatus('denied');
     }
-  }, []);
-
-  const stopCamera = useCallback(() => {
-    if (stream) {
-      stream.getTracks().forEach(track => track.stop());
-      setStream(null);
-    }
-  }, [stream]);
+  }, [stopCamera]);
 
   const captureImage = useCallback(() => {
-    if (!videoRef.current || !stream) return null;
+    if (!videoRef.current || !streamRef.current) return null;
 
     const canvas = document.createElement('canvas');
     const video = videoRef.current;
@@ -56,6 +64,13 @@ export function useCamera() {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     
     return canvas.toDataURL('image/png');
+  }, []);
+
+  // Ensure video element gets the stream if it mounts/updates
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream;
+    }
   }, [stream]);
 
   useEffect(() => {
