@@ -9,7 +9,7 @@ import { FILTERS } from './FilterSelector'
 import { usePhotoboothStore } from '@/store/usePhotoboothStore'
 
 export function CameraView({ onCapture, isCapturing = false }) {
-    const { videoRef, startCamera, permissionStatus, captureImage, stream } = useCamera()
+    const { videoRef, startCamera, permissionStatus, stream } = useCamera()
     const { activeFilterId, countdownDuration } = usePhotoboothStore()
     const [countdown, setCountdown] = useState(null)
 
