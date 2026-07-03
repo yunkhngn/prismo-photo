@@ -6,6 +6,7 @@ import { usePeer } from '@/hooks/usePeer';
 import { useDuoStore, loadPersistedSession } from '@/store/useDuoStore';
 import { LobbyView } from './LobbyView';
 import { CaptureView } from './CaptureView';
+import { DuoExportView } from './DuoExportView';
 import { Loader2 } from 'lucide-react';
 import { FILTERS } from '@/components/photobooth/FilterSelector';
 
@@ -82,7 +83,8 @@ export function DuoApp({ roomId }) {
       retakeRound,
       setFilter,
       setFrame,
-      setRemoteCursor
+      setRemoteCursor,
+      resetSession
     } = useDuoStore.getState();
 
     switch (msg.type) {
@@ -134,6 +136,12 @@ export function DuoApp({ roomId }) {
       case 'retake_round_intent':
         if (isHost) {
           retakeRound(msg.round);
+        }
+        break;
+
+      case 'retake_all_intent':
+        if (isHost) {
+          resetSession();
         }
         break;
 
@@ -259,6 +267,24 @@ export function DuoApp({ roomId }) {
     }
   };
 
+  // Frame Selection message
+  const onFrameSelect = (frameId) => {
+    if (isHost) {
+      useDuoStore.getState().setFrame(frameId);
+    } else {
+      send({ type: 'update_frame', frameId });
+    }
+  };
+
+  // Retake All action
+  const onRetakeAll = () => {
+    if (isHost) {
+      useDuoStore.getState().resetSession();
+    } else {
+      send({ type: 'retake_all_intent' });
+    }
+  };
+
   // Renders by phase
   if (!role) {
     return (
@@ -295,9 +321,11 @@ export function DuoApp({ roomId }) {
         />
       )}
       {store.phase === 'EXPORT' && (
-        <div className="max-w-4xl mx-auto text-center font-bold text-xl py-12">
-          EXPORT View Placeholder (Task 7)
-        </div>
+        <DuoExportView
+          isHost={isHost}
+          onFrameSelect={onFrameSelect}
+          onRetakeAll={onRetakeAll}
+        />
       )}
     </div>
   );
