@@ -408,6 +408,7 @@ export function DuoApp({ roomId }) {
           isHost={isHost}
           onFrameSelect={onFrameSelect}
           onRetakeAll={onRetakeAll}
+          onCursorMove={onCursorMove}
         />
       )}
 

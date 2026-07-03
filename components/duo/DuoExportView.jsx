@@ -19,11 +19,39 @@ const loadImage = (url) => {
   });
 };
 
-export function DuoExportView({ isHost, onFrameSelect, onRetakeAll }) {
+export function DuoExportView({ isHost, onFrameSelect, onRetakeAll, onCursorMove }) {
   const store = useDuoStore();
-  const { photos, selectedFrameId } = store;
+  const { photos, selectedFrameId, remoteCursor, remoteCursorTimestamp } = store;
   const canvasRef = useRef(null);
   const [rendering, setRendering] = useState(false);
+  const containerRef = useRef(null);
+  const lastSentRef = useRef(0);
+  const [showCursor, setShowCursor] = useState(false);
+
+  useEffect(() => {
+    if (!remoteCursor || !remoteCursorTimestamp) {
+      setShowCursor(false);
+      return;
+    }
+    setShowCursor(Date.now() - remoteCursorTimestamp < 2000);
+    const interval = setInterval(() => {
+      const active = Date.now() - remoteCursorTimestamp < 2000;
+      setShowCursor(active);
+      if (!active) clearInterval(interval);
+    }, 500);
+    return () => clearInterval(interval);
+  }, [remoteCursor, remoteCursorTimestamp]);
+
+  const handleMouseMove = (e) => {
+    if (!containerRef.current) return;
+    const now = Date.now();
+    if (now - lastSentRef.current < 50) return;
+    lastSentRef.current = now;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    onCursorMove({ x, y });
+  };
 
   const drawStrip = async (canvas, scale) => {
     if (!canvas) return;
@@ -143,7 +171,11 @@ export function DuoExportView({ isHost, onFrameSelect, onRetakeAll }) {
         {/* Left Column: Interactive scaled canvas preview */}
         <div className="lg:col-span-6 flex flex-col items-center justify-center bg-slate-100/50 rounded-3xl border-3 border-dashed border-slate-300 p-8 relative group min-h-[600px]">
           <ClayCard className="p-3 bg-slate-100 flex items-center justify-center shadow-inner w-fit border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748]">
-            <div className="relative">
+            <div
+              ref={containerRef}
+              onMouseMove={handleMouseMove}
+              className="relative cursor-crosshair"
+            >
               <canvas
                 ref={canvasRef}
                 width={360}
@@ -153,6 +185,26 @@ export function DuoExportView({ isHost, onFrameSelect, onRetakeAll }) {
               {rendering && (
                 <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center">
                   <Loader2 className="w-8 h-8 animate-spin text-[#2D3748]" />
+                </div>
+              )}
+              {showCursor && remoteCursor && (
+                <div
+                  className="absolute pointer-events-none z-40 transition-all duration-75 ease-out"
+                  style={{
+                    left: `${remoteCursor.x * 100}%`,
+                    top: `${remoteCursor.y * 100}%`,
+                    transform: 'translate(-50%, -50%)'
+                  }}
+                >
+                  <div className="relative">
+                    <div className="w-5 h-5 rounded-full bg-[#FFCFE3] border-3 border-[#2D3748] shadow-[2px_2px_0px_0px_#2D3748] animate-ping absolute" />
+                    <div className="w-5 h-5 rounded-full bg-[#FFCFE3] border-3 border-[#2D3748] shadow-[2px_2px_0px_0px_#2D3748] relative flex items-center justify-center">
+                      <span className="text-[8px] font-black text-[#2D3748]">P</span>
+                    </div>
+                    <div className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-[#2D3748] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md whitespace-nowrap shadow-[2px_2px_0px_0px_#FFCFE3] uppercase border border-white">
+                      Partner
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
