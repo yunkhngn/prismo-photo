@@ -71,16 +71,22 @@ export function DuoApp({ roomId }) {
   const isHost = role === 'host';
 
   // State Sync handler
-  // Host is source of truth and pushes state updates to Guest
+  // Host is source of truth and pushes state updates to Guest.
+  // Only re-sends when the syncable fields actually changed (e.g. NOT on cursor moves).
   useEffect(() => {
     if (!isHost || store.connectionState !== 'connected') return;
-    const unsubscribe = useDuoStore.subscribe((state) => {
+
+    let lastSentSnapshot = null;
+    const sendIfChanged = () => {
       const snapshot = useDuoStore.getState().getSnapshot();
+      const serialized = JSON.stringify(snapshot);
+      if (serialized === lastSentSnapshot) return;
+      lastSentSnapshot = serialized;
       send({ type: 'state_sync', snapshot });
-    });
-    // Send immediate snapshot on start
-    const snapshot = useDuoStore.getState().getSnapshot();
-    send({ type: 'state_sync', snapshot });
+    };
+
+    const unsubscribe = useDuoStore.subscribe(sendIfChanged);
+    sendIfChanged(); // send immediate snapshot on start
     return () => unsubscribe();
   }, [isHost, store.connectionState]);
 
