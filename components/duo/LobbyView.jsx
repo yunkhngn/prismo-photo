@@ -22,10 +22,8 @@ export function LobbyView({ roomId, isHost, connectionState, localStream, remote
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // If both connected and both streams are present, advance phase
   useEffect(() => {
     if (peerPresent && localStream && remoteStream && isHost) {
-      console.log("Both connected and streams present. Host advancing phase to CAPTURE.");
       setPhase('CAPTURE');
     }
   }, [peerPresent, localStream, remoteStream, isHost, setPhase]);

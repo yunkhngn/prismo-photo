@@ -68,7 +68,6 @@ export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnecte
     connRef.current = conn;
 
     conn.on('open', () => {
-      console.log("Data connection established");
       setConnectionState('connected');
       
       if (callbacksRef.current.onPeerConnected) {
@@ -80,11 +79,9 @@ export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnecte
         conn.send(JSON.stringify({ type: 'hello', role: 'guest' }));
         // Guest initiates media call once data connection is open
         if (peerRef.current && localStreamRef.current) {
-          console.log("Guest calling host with stream...");
           const call = peerRef.current.call(roomId, localStreamRef.current);
           mediaCallRef.current = call;
           call.on('stream', (stream) => {
-            console.log("Guest received remote media stream");
             setRemoteStream(stream);
             if (callbacksRef.current.onRemoteStream) {
               callbacksRef.current.onRemoteStream(stream);
@@ -115,7 +112,6 @@ export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnecte
     });
 
     conn.on('close', () => {
-      console.log("Data connection closed");
       setConnectionState('reconnecting');
       connRef.current = null;
       if (callbacksRef.current.onPeerDisconnected) {
@@ -141,7 +137,6 @@ export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnecte
 
       peer.on('open', (id) => {
         setLastErrorType(null);
-        console.log(`Peer connection opened. My ID is: ${id}`);
         if (!isHost) {
           // Guest initiates connection to Host
           const conn = peer.connect(roomId, { reliable: true });
@@ -154,7 +149,6 @@ export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnecte
         if (isHost) {
           if (connRef.current) {
             // Already have a guest. Reject/close extra connections.
-            console.log("Rejecting extra peer connection");
             conn.on('open', () => {
               conn.send(JSON.stringify({ type: 'room_full' }));
               setTimeout(() => conn.close(), 500);
@@ -167,11 +161,9 @@ export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnecte
 
       // Handle incoming media calls (Host receives call from Guest)
       peer.on('call', (call) => {
-        console.log("Received incoming call");
         mediaCallRef.current = call;
         call.answer(localStreamRef.current || undefined);
         call.on('stream', (stream) => {
-          console.log("Received remote media stream");
           setRemoteStream(stream);
           if (callbacksRef.current.onRemoteStream) {
             callbacksRef.current.onRemoteStream(stream);
@@ -195,12 +187,10 @@ export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnecte
       });
 
       peer.on('disconnected', () => {
-        console.log("Peer disconnected from broker, attempting reconnect...");
         peer.reconnect();
       });
 
       peer.on('close', () => {
-        console.log("Peer destroyed");
         setConnectionState('idle');
       });
     }).catch(err => {
@@ -225,7 +215,6 @@ export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnecte
     localStreamRef.current = localStream;
     // If connection is already open and we are guest, make sure to call
     if (!isHost && peerRef.current && connRef.current && connRef.current.open && !mediaCallRef.current) {
-      console.log("calling host with stream asynchronously");
       const call = peerRef.current.call(roomId, localStream);
       mediaCallRef.current = call;
       call.on('stream', (stream) => {
@@ -244,16 +233,12 @@ export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnecte
   }, [isHost, roomId]);
 
   const reconnect = useCallback(() => {
-    console.log("Manual reconnect triggered");
-    
     if (peerRef.current && !peerRef.current.destroyed) {
       if (peerRef.current.disconnected) {
-        console.log("Reconnecting peer to broker...");
         peerRef.current.reconnect();
       }
       
       if (!isHost) {
-        console.log("Guest establishing a new datachannel...");
         if (connRef.current) {
           try {
             connRef.current.close();
@@ -262,7 +247,6 @@ export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnecte
         const conn = peerRef.current.connect(roomId, { reliable: true });
         setupDataConnection(conn);
       } else {
-        console.log("Host waiting for incoming connections...");
         setConnectionState('connecting');
       }
       return;

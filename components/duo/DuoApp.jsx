@@ -204,18 +204,12 @@ export function DuoApp({ roomId }) {
     }
   };
 
-  const onRemoteStream = (remoteStream) => {
-    console.log("onRemoteStream called with stream:", remoteStream);
-  };
-
   const onPeerConnected = () => {
-    console.log("Peer connected!");
     useDuoStore.getState().setPeerPresent(true);
     useDuoStore.getState().setConnectionState('connected');
   };
 
   const onPeerDisconnected = () => {
-    console.log("Peer disconnected!");
     useDuoStore.getState().setPeerPresent(false);
     useDuoStore.getState().setConnectionState('reconnecting');
   };
@@ -224,7 +218,6 @@ export function DuoApp({ roomId }) {
     roomId,
     isHost,
     onData,
-    onRemoteStream,
     onPeerConnected,
     onPeerDisconnected
   });
