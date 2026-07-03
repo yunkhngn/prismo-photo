@@ -6,7 +6,7 @@ import { SlotGrid } from './SlotGrid';
 import { useDuoStore } from '@/store/useDuoStore';
 import { DuoFilterSelector } from './DuoFilterSelector';
 import { ClayButton } from '@/components/ui/clay-button';
-import { Camera } from 'lucide-react';
+import { Camera, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function CaptureView({
@@ -141,25 +141,20 @@ export function CaptureView({
           </div>
 
           {/* Capture Control Panel */}
-          <div className="bg-white p-6 rounded-2xl border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="flex flex-col gap-2 w-full sm:w-auto">
-              <span className="font-extrabold text-xs uppercase text-slate-400">Countdown Timer</span>
-              <div className="flex items-center gap-2">
-                {[3, 5, 10].map((sec) => (
-                  <button
-                    key={sec}
-                    disabled={!!captureLock || isCountdownActive}
-                    onClick={() => onCountdownDurationSelect(sec)}
-                    className={cn(
-                      "px-4 py-2 text-sm font-black rounded-xl border-3 border-[#2D3748] transition-all",
-                      countdownDuration === sec
-                        ? "bg-[#FFECA1] shadow-[2px_2px_0px_0px_#2D3748]"
-                        : "bg-slate-50 hover:bg-slate-100 shadow-[2px_2px_0px_0px_#2D3748] hover:translate-y-0.5 active:shadow-[1px_1px_0px_0px_#2D3748] active:translate-y-0.5"
-                    )}
-                  >
-                    {sec}s
-                  </button>
-                ))}
+          <div className="bg-white p-6 rounded-2xl border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] flex flex-col sm:flex-row items-center gap-4">
+            <div className="relative w-full sm:w-auto">
+              <select
+                value={countdownDuration}
+                disabled={!!captureLock || isCountdownActive}
+                onChange={(e) => onCountdownDurationSelect(Number(e.target.value))}
+                className="appearance-none w-full bg-white text-[#2D3748] text-sm font-black px-5 py-3.5 pr-12 rounded-xl border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_#2D3748] active:translate-y-1 active:shadow-[1px_1px_0px_0px_#2D3748] focus:outline-none cursor-pointer transition-all"
+              >
+                <option value={3}>3s Timer</option>
+                <option value={5}>5s Timer</option>
+                <option value={10}>10s Timer</option>
+              </select>
+              <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-[#2D3748]">
+                <ChevronDown className="w-4 h-4 stroke-[3px]" />
               </div>
             </div>
 
