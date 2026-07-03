@@ -12,11 +12,22 @@ import { FILTERS } from '@/components/photobooth/FilterSelector';
 import { ClayCard } from '@/components/ui/clay-card';
 import { ClayButton } from '@/components/ui/clay-button';
 
+const DUO_PHOTO_MAX_EDGE = 1280;
+const DUO_PHOTO_JPEG_QUALITY = 0.85;
+
 function captureLocalFrame(video, filterCss = 'none') {
   if (!video) return null;
+
+  const sourceWidth = video.videoWidth || 640;
+  const sourceHeight = video.videoHeight || 480;
+  const longestEdge = Math.max(sourceWidth, sourceHeight);
+  const scale = longestEdge > DUO_PHOTO_MAX_EDGE ? DUO_PHOTO_MAX_EDGE / longestEdge : 1;
+  const width = Math.round(sourceWidth * scale);
+  const height = Math.round(sourceHeight * scale);
+
   const canvas = document.createElement('canvas');
-  canvas.width = video.videoWidth || 640;
-  canvas.height = video.videoHeight || 480;
+  canvas.width = width;
+  canvas.height = height;
   const ctx = canvas.getContext('2d');
   
   if (filterCss && filterCss !== 'none') {
@@ -26,8 +37,8 @@ function captureLocalFrame(video, filterCss = 'none') {
   // Mirror
   ctx.translate(canvas.width, 0);
   ctx.scale(-1, 1);
-  ctx.drawImage(video, 0, 0);
-  return canvas.toDataURL('image/png');
+  ctx.drawImage(video, 0, 0, width, height);
+  return canvas.toDataURL('image/jpeg', DUO_PHOTO_JPEG_QUALITY);
 }
 
 export function DuoApp({ roomId }) {
