@@ -7,6 +7,7 @@ import { ClayButton } from '@/components/ui/clay-button';
 import { Download, ArrowLeft, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FRAMES } from '@/lib/frames';
+import { DEFAULT_LAYOUTS } from '@/lib/layouts';
 
 const loadImage = (url) => {
   return new Promise((resolve, reject) => {
@@ -29,20 +30,8 @@ export function DuoExportView({ isHost, onFrameSelect, onRetakeAll }) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const layout = {
-      canvasWidth: 1200,
-      canvasHeight: 1900,
-      slots: [
-        { id: "slot-1", x: 50,  y: 50,   width: 525, height: 394, owner: "host"  },
-        { id: "slot-2", x: 625, y: 50,   width: 525, height: 394, owner: "guest" },
-        { id: "slot-3", x: 50,  y: 494,  width: 525, height: 394, owner: "host"  },
-        { id: "slot-4", x: 625, y: 494,  width: 525, height: 394, owner: "guest" },
-        { id: "slot-5", x: 50,  y: 938,  width: 525, height: 394, owner: "host"  },
-        { id: "slot-6", x: 625, y: 938,  width: 525, height: 394, owner: "guest" },
-        { id: "slot-7", x: 50,  y: 1382, width: 525, height: 394, owner: "host"  },
-        { id: "slot-8", x: 625, y: 1382, width: 525, height: 394, owner: "guest" },
-      ]
-    };
+    const layout = DEFAULT_LAYOUTS.find((l) => l.id === '4x2-duo');
+    if (!layout) return;
 
     // Draw background
     ctx.fillStyle = '#ffffff';
@@ -107,12 +96,6 @@ export function DuoExportView({ isHost, onFrameSelect, onRetakeAll }) {
       }
     }
 
-    // Draw Timestamp
-    const dateStr = new Date().toLocaleString();
-    ctx.fillStyle = '#2D3748';
-    ctx.font = `bold ${Math.round(20 * scale)}px Arial`;
-    ctx.textAlign = 'left';
-    ctx.fillText(dateStr, 50 * scale, (layout.canvasHeight - 50) * scale);
   };
 
   // Render preview canvas on state changes
