@@ -149,11 +149,11 @@ export function DuoExportView({ isHost, onFrameSelect, onRetakeAll, onCursorMove
     
     await drawStrip(hiddenCanvas, 1.0); // full scale high-res
     
-    const dataUrl = hiddenCanvas.toDataURL('image/png');
+    const dataUrl = hiddenCanvas.toDataURL('image/jpeg', 0.92);
     if (dataUrl) {
       const link = document.createElement('a');
       link.href = dataUrl;
-      link.download = `prismo-duo-${Date.now()}.png`;
+      link.download = 'prismo-duo.jpg';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
