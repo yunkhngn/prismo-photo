@@ -18,6 +18,7 @@ export const useDuoStore = create((set, get) => ({
   // shared selections (last-write-wins)
   activeFilterId: null,
   selectedFrameId: 'frame-1',
+  countdownDuration: 3,      // default 3 seconds
 
   // presence
   remoteCursor: null,        // { x, y } normalized 0..1
@@ -34,6 +35,7 @@ export const useDuoStore = create((set, get) => ({
     photos: {},
     activeFilterId: null,
     selectedFrameId: 'frame-1',
+    countdownDuration: 3,
     remoteCursor: null,
     remoteCursorTimestamp: null,
     peerPresent: false
@@ -50,6 +52,8 @@ export const useDuoStore = create((set, get) => ({
   clearCaptureLock: () => set({ captureLock: null }),
   
   setCountdown: (countdown) => set({ countdown }),
+
+  setCountdownDuration: (countdownDuration) => set({ countdownDuration }),
   
   setPhoto: (round, role, dataUrl) => set((state) => {
     const newPhotos = { ...state.photos };
@@ -103,8 +107,8 @@ export const useDuoStore = create((set, get) => ({
   }),
   
   getSnapshot: () => {
-    const { currentRound, photos, activeFilterId, selectedFrameId, phase } = get();
-    return { currentRound, photos, activeFilterId, selectedFrameId, phase };
+    const { currentRound, photos, activeFilterId, selectedFrameId, phase, countdownDuration } = get();
+    return { currentRound, photos, activeFilterId, selectedFrameId, phase, countdownDuration };
   },
   
   applySnapshot: (snapshot) => {
@@ -114,7 +118,8 @@ export const useDuoStore = create((set, get) => ({
       photos: snapshot.photos ?? {},
       activeFilterId: snapshot.activeFilterId ?? null,
       selectedFrameId: snapshot.selectedFrameId ?? 'frame-1',
-      phase: snapshot.phase ?? 'LOBBY'
+      phase: snapshot.phase ?? 'LOBBY',
+      countdownDuration: snapshot.countdownDuration ?? 3
     });
   },
   
@@ -126,6 +131,7 @@ export const useDuoStore = create((set, get) => ({
     photos: {},
     activeFilterId: null,
     selectedFrameId: 'frame-1',
+    countdownDuration: 3,
     remoteCursor: null,
     remoteCursorTimestamp: null
   })
@@ -146,7 +152,8 @@ if (typeof window !== 'undefined') {
           photos: state.photos,
           activeFilterId: state.activeFilterId,
           selectedFrameId: state.selectedFrameId,
-          phase: state.phase
+          phase: state.phase,
+          countdownDuration: state.countdownDuration
         }
       };
       sessionStorage.setItem('prismo-duo-session', JSON.stringify(dataToSave));

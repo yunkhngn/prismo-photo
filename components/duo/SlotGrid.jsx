@@ -2,16 +2,16 @@
 
 import React from 'react';
 import { ClayButton } from '@/components/ui/clay-button';
-import { Camera, RefreshCw } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export function SlotGrid({ photos, currentRound, phase, onTriggerCapture, onRetakeRound, isHost }) {
+export function SlotGrid({ photos, currentRound, phase, onRetakeRound }) {
   const rounds = [1, 2, 3, 4];
 
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold">Strip Slots</h2>
+        <h2 className="text-xl font-bold uppercase tracking-tight">Strip Slots</h2>
         <span className="text-sm font-bold text-slate-500">
           Round {currentRound} of 4
         </span>
@@ -63,7 +63,7 @@ export function SlotGrid({ photos, currentRound, phase, onTriggerCapture, onReta
                   )}
                 >
                   {hostPhoto ? (
-                    <img src={hostPhoto} alt={`Host Rd ${round}`} className="w-full h-full object-cover" />
+                    <img src={hostPhoto} alt={`Host Rd ${round}`} className="w-full h-full object-cover animate-in zoom-in duration-200" />
                   ) : (
                     <span className="text-xs font-bold text-slate-400">Host Photo</span>
                   )}
@@ -80,7 +80,7 @@ export function SlotGrid({ photos, currentRound, phase, onTriggerCapture, onReta
                   )}
                 >
                   {guestPhoto ? (
-                    <img src={guestPhoto} alt={`Guest Rd ${round}`} className="w-full h-full object-cover" />
+                    <img src={guestPhoto} alt={`Guest Rd ${round}`} className="w-full h-full object-cover animate-in zoom-in duration-200" />
                   ) : (
                     <span className="text-xs font-bold text-slate-400">Guest Photo</span>
                   )}
@@ -90,18 +90,6 @@ export function SlotGrid({ photos, currentRound, phase, onTriggerCapture, onReta
           );
         })}
       </div>
-
-      {phase === 'CAPTURE' && (
-        <ClayButton
-          variant="success"
-          size="lg"
-          onClick={onTriggerCapture}
-          className="w-full h-12 text-sm font-black uppercase tracking-wider rounded-xl border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_#2D3748] transition-all bg-[#86EFAC] text-[#2D3748] mt-2"
-        >
-          <Camera className="w-4 h-4 mr-2" />
-          Capture Round
-        </ClayButton>
-      )}
     </div>
   );
 }

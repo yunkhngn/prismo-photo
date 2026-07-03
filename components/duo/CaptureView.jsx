@@ -5,6 +5,9 @@ import { DuoCameraView } from './DuoCameraView';
 import { SlotGrid } from './SlotGrid';
 import { useDuoStore } from '@/store/useDuoStore';
 import { DuoFilterSelector } from './DuoFilterSelector';
+import { ClayButton } from '@/components/ui/clay-button';
+import { Camera } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export function CaptureView({
   isHost,
@@ -14,10 +17,21 @@ export function CaptureView({
   triggerCaptureIntent,
   retakeRoundIntent,
   onCursorMove,
-  onFilterSelect
+  onFilterSelect,
+  onCountdownDurationSelect
 }) {
   const store = useDuoStore();
-  const { photos, currentRound, phase, countdown, captureLock, activeFilterId, remoteCursor, remoteCursorTimestamp } = store;
+  const {
+    photos,
+    currentRound,
+    phase,
+    countdown,
+    captureLock,
+    activeFilterId,
+    remoteCursor,
+    remoteCursorTimestamp,
+    countdownDuration
+  } = store;
 
   const containerRef = useRef(null);
   const lastSentRef = useRef(0);
@@ -68,7 +82,7 @@ export function CaptureView({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Side: Side-by-side cameras & filter selector */}
+        {/* Left Side: Side-by-side cameras, control panel & filter selector */}
         <div className="lg:col-span-2 flex flex-col gap-6">
           <div
             ref={containerRef}
@@ -126,9 +140,44 @@ export function CaptureView({
             )}
           </div>
 
+          {/* Capture Control Panel */}
+          <div className="bg-white p-6 rounded-2xl border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <span className="font-extrabold text-xs uppercase text-slate-400">Countdown Timer</span>
+              <div className="flex items-center gap-2">
+                {[3, 5, 10].map((sec) => (
+                  <button
+                    key={sec}
+                    disabled={!!captureLock || isCountdownActive}
+                    onClick={() => onCountdownDurationSelect(sec)}
+                    className={cn(
+                      "px-4 py-2 text-sm font-black rounded-xl border-3 border-[#2D3748] transition-all",
+                      countdownDuration === sec
+                        ? "bg-[#FFECA1] shadow-[2px_2px_0px_0px_#2D3748]"
+                        : "bg-slate-50 hover:bg-slate-100 shadow-[2px_2px_0px_0px_#2D3748] hover:translate-y-0.5 active:shadow-[1px_1px_0px_0px_#2D3748] active:translate-y-0.5"
+                    )}
+                  >
+                    {sec}s
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <ClayButton
+              variant="success"
+              size="lg"
+              disabled={!!captureLock || isCountdownActive}
+              onClick={triggerCaptureIntent}
+              className="w-full sm:flex-1 h-14 text-base font-black uppercase tracking-wider rounded-xl border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_#2D3748] active:translate-y-1 active:shadow-[1px_1px_0px_0px_#2D3748] transition-all bg-[#86EFAC] text-[#2D3748]"
+            >
+              <Camera className="w-5 h-5 mr-2" />
+              Capture Round {currentRound}
+            </ClayButton>
+          </div>
+
           {/* Status Banner */}
           {captureLock && (
-            <div className="p-4 rounded-xl border-3 border-[#2D3748] bg-[#FFECA1] font-bold text-center shadow-[4px_4px_0px_0px_#2D3748]">
+            <div className="p-4 rounded-xl border-3 border-[#2D3748] bg-[#FFECA1] font-bold text-center shadow-[4px_4px_0px_0px_#2D3748] animate-pulse">
               {captureLock.lockedBy === (isHost ? 'host' : 'guest') ? 'You' : 'Your partner'} initiated capture! Get ready!
             </div>
           )}
@@ -143,15 +192,13 @@ export function CaptureView({
           </div>
         </div>
 
-        {/* Right Side: Slot Grid & controls */}
+        {/* Right Side: Slot Grid */}
         <div className="bg-white p-6 rounded-2xl border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] h-fit">
           <SlotGrid
             photos={photos}
             currentRound={currentRound}
             phase={phase}
-            onTriggerCapture={triggerCaptureIntent}
             onRetakeRound={retakeRoundIntent}
-            isHost={isHost}
           />
         </div>
       </div>

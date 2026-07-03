@@ -86,7 +86,8 @@ export function DuoApp({ roomId }) {
       setFilter,
       setFrame,
       setRemoteCursor,
-      resetSession
+      resetSession,
+      setCountdownDuration
     } = useDuoStore.getState();
 
     switch (msg.type) {
@@ -108,7 +109,7 @@ export function DuoApp({ roomId }) {
           const state = useDuoStore.getState();
           if (!state.captureLock) {
             setCaptureLock({ round: state.currentRound, lockedBy: 'guest' });
-            setCountdown(3);
+            setCountdown(state.countdownDuration);
           }
         }
         break;
@@ -160,6 +161,12 @@ export function DuoApp({ roomId }) {
       case 'update_frame':
         if (isHost) {
           setFrame(msg.frameId);
+        }
+        break;
+
+      case 'update_countdown_duration':
+        if (isHost) {
+          setCountdownDuration(msg.duration);
         }
         break;
 
@@ -240,7 +247,7 @@ export function DuoApp({ roomId }) {
     if (state.captureLock) return; // already locked
     if (isHost) {
       useDuoStore.getState().setCaptureLock({ round: state.currentRound, lockedBy: 'host' });
-      useDuoStore.getState().setCountdown(3);
+      useDuoStore.getState().setCountdown(state.countdownDuration);
     } else {
       send({ type: 'take_photo_intent', from: 'guest' });
     }
@@ -284,6 +291,15 @@ export function DuoApp({ roomId }) {
       useDuoStore.getState().resetSession();
     } else {
       send({ type: 'retake_all_intent' });
+    }
+  };
+
+  // Countdown Duration Selection action
+  const onCountdownDurationSelect = (duration) => {
+    if (isHost) {
+      useDuoStore.getState().setCountdownDuration(duration);
+    } else {
+      send({ type: 'update_countdown_duration', duration });
     }
   };
 
@@ -335,6 +351,7 @@ export function DuoApp({ roomId }) {
           retakeRoundIntent={retakeRoundIntent}
           onCursorMove={onCursorMove}
           onFilterSelect={onFilterSelect}
+          onCountdownDurationSelect={onCountdownDurationSelect}
         />
       )}
       {store.phase === 'EXPORT' && (
