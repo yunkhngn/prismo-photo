@@ -14,7 +14,7 @@ const createSlotsForLayout = (layoutId) => {
 
 export const usePhotoboothStore = create((set, get) => ({
   // Config
-  layouts: DEFAULT_LAYOUTS,
+  layouts: DEFAULT_LAYOUTS.filter(l => !l.duoOnly),
   frames: FRAMES, // Initialize with default frames
   
   // Initial State
