@@ -39,14 +39,14 @@ export function LobbyView({ roomId, isHost, connectionState, localStream, remote
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
         {/* Left Card: Local Camera */}
-        <ClayCard className="p-6 flex flex-col gap-4 bg-white">
-          <h2 className="text-xl font-bold flex items-center gap-2">
+        <ClayCard className="p-6 flex flex-col gap-4 bg-white border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] rounded-2xl">
+          <h2 className="text-xl font-black uppercase tracking-tight flex items-center gap-2">
             <Users className="w-5 h-5 text-[#BDE7FF]" />
             Your Camera ({isHost ? 'Host' : 'Guest'})
           </h2>
           <div className="relative aspect-video bg-black rounded-2xl overflow-hidden flex items-center justify-center border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748]">
             {permissionStatus === 'denied' ? (
-              <div className="text-center p-4 bg-white/90 rounded-xl m-4">
+              <div className="text-center p-4 bg-white/90 rounded-xl m-4 border-2 border-[#2D3748]">
                 <VideoOff className="w-12 h-12 text-red-500 mx-auto mb-2" />
                 <p className="font-bold text-[#2D3748]">Camera Access Denied</p>
                 <p className="text-xs text-slate-600">Please check your browser permissions.</p>
@@ -57,16 +57,16 @@ export function LobbyView({ roomId, isHost, connectionState, localStream, remote
                 autoPlay
                 playsInline
                 muted
-                className="w-full h-full object-cover transform -scale-x-100"
+                className="w-full h-full object-cover transform -scale-x-100 animate-in fade-in duration-300"
               />
             ) : (
               <div className="flex flex-col items-center gap-2 text-white">
-                <Loader2 className="w-8 h-8 animate-spin" />
+                <Loader2 className="w-8 h-8 animate-spin text-[#BDE7FF]" />
                 <p className="text-sm font-bold">Accessing camera...</p>
               </div>
             )}
           </div>
-          <div className="text-center">
+          <div className="text-center mt-2">
             <span className="inline-block px-4 py-1.5 rounded-full text-sm font-black bg-[#FFCFE3] border-2 border-[#2D3748] shadow-[2px_2px_0px_0px_#2D3748] uppercase">
               {isHost ? 'Host' : 'Guest'}
             </span>
@@ -74,28 +74,32 @@ export function LobbyView({ roomId, isHost, connectionState, localStream, remote
         </ClayCard>
 
         {/* Right Card: Partner Status & Invite */}
-        <ClayCard className="p-6 flex flex-col justify-between gap-6 bg-white">
+        <ClayCard className="p-6 flex flex-col justify-between gap-6 bg-white border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] rounded-2xl">
           <div className="flex flex-col gap-4">
-            <h2 className="text-xl font-bold">Invite Partner</h2>
+            <h2 className="text-xl font-black uppercase tracking-tight">Invite Partner</h2>
             <p className="text-sm text-slate-600 font-bold leading-relaxed">
               Share this link with your partner. When they join and share their camera, you will start the photobooth!
             </p>
             
-            <div className="flex items-center gap-2 bg-slate-50 p-3 rounded-xl border-3 border-[#2D3748]">
+            <div className="flex items-center gap-2 bg-slate-50 p-3 rounded-xl border-3 border-[#2D3748] shadow-inner">
               <input
                 type="text"
                 readOnly
                 value={roomUrl}
-                className="bg-transparent border-none text-xs font-bold w-full select-all focus:outline-none text-slate-600"
+                className="bg-transparent border-none text-xs font-black w-full select-all focus:outline-none text-slate-600"
               />
-              <ClayButton size="sm" onClick={handleCopy} className="flex-shrink-0 bg-[#BDE7FF] hover:bg-[#BDE7FF]/80 shadow-[2px_2px_0px_0px_#2D3748] border-2 border-[#2D3748]">
+              <ClayButton
+                size="sm"
+                onClick={handleCopy}
+                className="flex-shrink-0 bg-[#BDE7FF] hover:bg-[#BDE7FF]/80 shadow-[2px_2px_0px_0px_#2D3748] border-2 border-[#2D3748] active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_#2D3748] transition-all"
+              >
                 {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               </ClayButton>
             </div>
           </div>
 
           <div className="flex flex-col gap-4 pt-4 border-t-3 border-dashed border-[#2D3748]">
-            <h3 className="font-bold text-lg">Connection Info</h3>
+            <h3 className="font-black text-lg uppercase tracking-tight">Connection Info</h3>
             <div className="flex flex-col gap-2 text-sm font-bold text-slate-600">
               <div className="flex justify-between items-center">
                 <span>Broker Connection:</span>
@@ -121,8 +125,8 @@ export function LobbyView({ roomId, isHost, connectionState, localStream, remote
       </div>
 
       {!peerPresent && (
-        <div className="flex items-center gap-3 bg-white px-6 py-4 rounded-2xl border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748]">
-          <Loader2 className="w-5 h-5 animate-spin text-[#FFCFE3]" />
+        <div className="flex items-center gap-3 bg-[#FFECA1] px-6 py-4 rounded-2xl border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] animate-pulse">
+          <Loader2 className="w-5 h-5 animate-spin text-[#2D3748]" />
           <span className="font-extrabold text-sm uppercase tracking-wider">Waiting for your partner to join...</span>
         </div>
       )}
