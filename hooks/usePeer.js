@@ -207,7 +207,7 @@ export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnecte
   }, [roomId, isHost, cleanup, setupDataConnection]);
 
   const send = useCallback((msg) => {
-    if (connRef.current && (connectionState === 'connected' || connRef.current.open)) {
+    if (connRef.current && connRef.current.open && connRef.current.dataChannel?.readyState === 'open') {
       try {
         connRef.current.send(JSON.stringify(msg));
       } catch (e) {
@@ -216,7 +216,7 @@ export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnecte
     } else {
       console.warn("Cannot send message: data connection not open", msg);
     }
-  }, [connectionState]);
+  }, []);
 
   const callWithStream = useCallback((localStream) => {
     localStreamRef.current = localStream;
