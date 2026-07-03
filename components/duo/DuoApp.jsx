@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useCamera } from '@/hooks/useCamera';
 import { usePeer } from '@/hooks/usePeer';
 import { useDuoStore, loadPersistedSession } from '@/store/useDuoStore';
@@ -9,11 +9,17 @@ import { CaptureView } from './CaptureView';
 import { DuoExportView } from './DuoExportView';
 import { Loader2 } from 'lucide-react';
 import { FILTERS } from '@/components/photobooth/FilterSelector';
+import { ReconnectBanner } from './ReconnectBanner';
 import { ClayCard } from '@/components/ui/clay-card';
 import { ClayButton } from '@/components/ui/clay-button';
 
 const DUO_PHOTO_MAX_EDGE = 1280;
 const DUO_PHOTO_JPEG_QUALITY = 0.85;
+
+const RECONNECT_INTERVAL_MS = 5000;
+const RECONNECT_INTERVAL_UNAVAILABLE_ID_MS = 3000;
+const MAX_RECONNECT_ATTEMPTS = 6;
+const MAX_UNAVAILABLE_ID_ATTEMPTS = 5;
 
 function captureLocalFrame(video, filterCss = 'none') {
   if (!video) return null;
@@ -208,7 +214,7 @@ export function DuoApp({ roomId }) {
     useDuoStore.getState().setConnectionState('reconnecting');
   };
 
-  const { connectionState, send, callWithStream, remoteStream, reconnect } = usePeer({
+  const { connectionState, send, callWithStream, remoteStream, reconnect, lastErrorType } = usePeer({
     roomId,
     isHost,
     onData,
@@ -324,16 +330,26 @@ export function DuoApp({ roomId }) {
   const showDisconnectOverlay = (store.phase !== 'LOBBY') && 
     (store.connectionState === 'reconnecting' || store.connectionState === 'error' || !store.peerPresent);
 
+  const [reconnectAttempts, setReconnectAttempts] = useState(0);
+  const isUnavailableId = lastErrorType === 'unavailable-id';
+  const maxReconnectAttempts = isUnavailableId ? MAX_UNAVAILABLE_ID_ATTEMPTS : MAX_RECONNECT_ATTEMPTS;
+  const reconnectInterval = isUnavailableId ? RECONNECT_INTERVAL_UNAVAILABLE_ID_MS : RECONNECT_INTERVAL_MS;
+  const autoRetryExhausted = !isHost && reconnectAttempts >= maxReconnectAttempts;
+
   useEffect(() => {
-    if (!showDisconnectOverlay) return;
-    if (isHost) return; // host's peer ID *is* the room — keep it alive, just wait for the guest
+    if (!showDisconnectOverlay || isHost) {
+      setReconnectAttempts(0);
+      return;
+    }
+    if (reconnectAttempts >= maxReconnectAttempts) return; // manual-only from here
 
     const timer = setTimeout(() => {
+      setReconnectAttempts((n) => n + 1);
       reconnect();
-    }, 3000);
+    }, reconnectInterval);
 
     return () => clearTimeout(timer);
-  }, [showDisconnectOverlay, reconnect, isHost]);
+  }, [showDisconnectOverlay, isHost, reconnect, reconnectAttempts, maxReconnectAttempts, reconnectInterval]);
 
   // Renders by phase
   if (!role) {
@@ -379,28 +395,8 @@ export function DuoApp({ roomId }) {
         />
       )}
 
-      {/* Neubrutalism Reconnect Dialog */}
       {showDisconnectOverlay && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-[4px] z-50 flex items-center justify-center p-4">
-          <ClayCard className="max-w-md w-full p-8 bg-white border-3 border-[#2D3748] shadow-[8px_8px_0px_0px_#2D3748] text-center flex flex-col items-center gap-4 animate-in zoom-in duration-200">
-            <div className="w-16 h-16 rounded-full bg-[#FFECA1] border-3 border-[#2D3748] flex items-center justify-center shadow-[4px_4px_0px_0px_#2D3748] animate-bounce">
-              <Loader2 className="w-8 h-8 animate-spin text-[#2D3748]" />
-            </div>
-            <h2 className="text-2xl font-black uppercase tracking-tight text-[#2D3748]">Connection Lost</h2>
-            <p className="text-slate-600 font-bold text-sm leading-relaxed">
-              We lost connection to your partner. Attempting to reconnect automatically...
-            </p>
-            <div className="flex gap-3 w-full mt-4">
-              <ClayButton
-                variant="primary"
-                onClick={reconnect}
-                className="flex-1 h-12 text-sm font-black uppercase tracking-wider rounded-xl border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_#2D3748] transition-all bg-[#BDE7FF] text-[#2D3748]"
-              >
-                Reconnect Now
-              </ClayButton>
-            </div>
-          </ClayCard>
-        </div>
+        <ReconnectBanner autoRetryExhausted={autoRetryExhausted} onReconnect={reconnect} />
       )}
     </div>
   );

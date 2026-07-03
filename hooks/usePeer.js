@@ -23,6 +23,7 @@ export function generateRoomId() {
 export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnected, onPeerDisconnected }) {
   const [connectionState, setConnectionState] = useState('idle');
   const [remoteStream, setRemoteStream] = useState(null);
+  const [lastErrorType, setLastErrorType] = useState(null);
 
   const peerRef = useRef(null);
   const connRef = useRef(null);
@@ -139,6 +140,7 @@ export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnecte
       peerRef.current = peer;
 
       peer.on('open', (id) => {
+        setLastErrorType(null);
         console.log(`Peer connection opened. My ID is: ${id}`);
         if (!isHost) {
           // Guest initiates connection to Host
@@ -188,6 +190,7 @@ export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnecte
 
       peer.on('error', (err) => {
         console.error("PeerJS error:", err.type, err);
+        setLastErrorType(err.type || 'unknown');
         setConnectionState('error');
       });
 
@@ -281,6 +284,7 @@ export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnecte
     send,
     callWithStream,
     remoteStream,
-    reconnect
+    reconnect,
+    lastErrorType
   };
 }
