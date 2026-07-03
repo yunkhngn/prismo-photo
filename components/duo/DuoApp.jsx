@@ -10,6 +10,7 @@ import { DuoExportView } from './DuoExportView';
 import { Loader2 } from 'lucide-react';
 import { FILTERS } from '@/components/photobooth/FilterSelector';
 import { ReconnectBanner } from './ReconnectBanner';
+import { RoomErrorView } from './RoomErrorView';
 import { ClayCard } from '@/components/ui/clay-card';
 import { ClayButton } from '@/components/ui/clay-button';
 
@@ -50,6 +51,7 @@ function captureLocalFrame(video, filterCss = 'none') {
 export function DuoApp({ roomId }) {
   const store = useDuoStore();
   const { videoRef, startCamera, permissionStatus, stream } = useCamera();
+  const [fatalRoomError, setFatalRoomError] = useState(null); // 'room_full' | 'not_found' | null
 
   // Decide role
   const isInitialized = useRef(false);
@@ -119,6 +121,10 @@ export function DuoApp({ roomId }) {
         if (isHost) {
           send({ type: 'state_sync', snapshot: useDuoStore.getState().getSnapshot() });
         }
+        break;
+
+      case 'room_full':
+        setFatalRoomError('room_full');
         break;
 
       case 'state_sync':
@@ -350,6 +356,16 @@ export function DuoApp({ roomId }) {
 
     return () => clearTimeout(timer);
   }, [showDisconnectOverlay, isHost, reconnect, reconnectAttempts, maxReconnectAttempts, reconnectInterval]);
+
+  useEffect(() => {
+    if (!isHost && lastErrorType === 'peer-unavailable' && store.phase === 'LOBBY') {
+      setFatalRoomError('not_found');
+    }
+  }, [isHost, lastErrorType, store.phase]);
+
+  if (fatalRoomError) {
+    return <RoomErrorView type={fatalRoomError} />;
+  }
 
   // Renders by phase
   if (!role) {
