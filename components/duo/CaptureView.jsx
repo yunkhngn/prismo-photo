@@ -108,11 +108,11 @@ export function CaptureView({
               />
             </div>
 
-            {/* Countdown Overlay */}
+            {/* Non-intrusive Floating Countdown Badge */}
             {isCountdownActive && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[3px] z-30 rounded-2xl border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] m-2">
-                <span className="text-[100px] font-black text-white drop-shadow-[0_4px_0_rgba(0,0,0,0.5)] animate-in zoom-in duration-200">
-                  {countdown === 0 ? 'CHEESE!' : countdown}
+              <div className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-[#FFECA1] border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] rounded-full px-8 py-3 z-30 flex items-center justify-center animate-bounce">
+                <span className="text-2xl font-black uppercase text-[#2D3748] tracking-wider whitespace-nowrap">
+                  {countdown === 0 ? '📸 CHEESE!' : `SMILE IN ${countdown}s`}
                 </span>
               </div>
             )}
@@ -163,16 +163,22 @@ export function CaptureView({
               </div>
             </div>
 
-            <ClayButton
-              variant="success"
-              size="lg"
-              disabled={!!captureLock || isCountdownActive}
-              onClick={triggerCaptureIntent}
-              className="w-full sm:flex-1 h-14 text-base font-black uppercase tracking-wider rounded-xl border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_#2D3748] active:translate-y-1 active:shadow-[1px_1px_0px_0px_#2D3748] transition-all bg-[#86EFAC] text-[#2D3748]"
-            >
-              <Camera className="w-5 h-5 mr-2" />
-              Capture Round {currentRound}
-            </ClayButton>
+            {isCountdownActive ? (
+              <div className="w-full sm:flex-1 h-14 flex items-center justify-center bg-[#FFECA1] border-3 border-[#2D3748] rounded-xl shadow-[4px_4px_0px_0px_#2D3748] text-lg font-black uppercase tracking-wider animate-pulse">
+                {countdown === 0 ? '📸 CHEESE!' : `Taking photo in ${countdown}...`}
+              </div>
+            ) : (
+              <ClayButton
+                variant="success"
+                size="lg"
+                disabled={!!captureLock}
+                onClick={triggerCaptureIntent}
+                className="w-full sm:flex-1 h-14 text-base font-black uppercase tracking-wider rounded-xl border-3 border-[#2D3748] shadow-[4px_4px_0px_0px_#2D3748] hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_#2D3748] active:translate-y-1 active:shadow-[1px_1px_0px_0px_#2D3748] transition-all bg-[#86EFAC] text-[#2D3748]"
+              >
+                <Camera className="w-5 h-5 mr-2" />
+                Capture Round {currentRound}
+              </ClayButton>
+            )}
           </div>
 
           {/* Status Banner */}

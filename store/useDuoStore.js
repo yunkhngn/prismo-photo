@@ -107,8 +107,8 @@ export const useDuoStore = create((set, get) => ({
   }),
   
   getSnapshot: () => {
-    const { currentRound, photos, activeFilterId, selectedFrameId, phase, countdownDuration } = get();
-    return { currentRound, photos, activeFilterId, selectedFrameId, phase, countdownDuration };
+    const { currentRound, photos, activeFilterId, selectedFrameId, phase, countdownDuration, countdown, captureLock } = get();
+    return { currentRound, photos, activeFilterId, selectedFrameId, phase, countdownDuration, countdown, captureLock };
   },
   
   applySnapshot: (snapshot) => {
@@ -119,7 +119,9 @@ export const useDuoStore = create((set, get) => ({
       activeFilterId: snapshot.activeFilterId ?? null,
       selectedFrameId: snapshot.selectedFrameId ?? 'frame-1',
       phase: snapshot.phase ?? 'LOBBY',
-      countdownDuration: snapshot.countdownDuration ?? 3
+      countdownDuration: snapshot.countdownDuration ?? 3,
+      countdown: snapshot.countdown ?? null,
+      captureLock: snapshot.captureLock ?? null
     });
   },
   
