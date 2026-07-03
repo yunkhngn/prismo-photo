@@ -72,7 +72,6 @@ export function DuoApp({ roomId }) {
 
   // Real-time peerJS wiring
   const onData = (msg) => {
-    console.log("Received data channel message:", msg);
     const {
       setPeerPresent,
       applySnapshot,
@@ -80,7 +79,10 @@ export function DuoApp({ roomId }) {
       setCountdown,
       setPhoto,
       advanceRoundIfComplete,
-      retakeRound
+      retakeRound,
+      setFilter,
+      setFrame,
+      setRemoteCursor
     } = useDuoStore.getState();
 
     switch (msg.type) {
@@ -132,6 +134,22 @@ export function DuoApp({ roomId }) {
       case 'retake_round_intent':
         if (isHost) {
           retakeRound(msg.round);
+        }
+        break;
+
+      case 'cursor_move':
+        setRemoteCursor({ x: msg.x, y: msg.y });
+        break;
+
+      case 'update_filter':
+        if (isHost) {
+          setFilter(msg.filterId);
+        }
+        break;
+
+      case 'update_frame':
+        if (isHost) {
+          setFrame(msg.frameId);
         }
         break;
 
@@ -227,6 +245,20 @@ export function DuoApp({ roomId }) {
     }
   };
 
+  // Cursor Move message
+  const onCursorMove = (coords) => {
+    send({ type: 'cursor_move', ...coords });
+  };
+
+  // Filter Selection message
+  const onFilterSelect = (filterId) => {
+    if (isHost) {
+      useDuoStore.getState().setFilter(filterId);
+    } else {
+      send({ type: 'update_filter', filterId });
+    }
+  };
+
   // Renders by phase
   if (!role) {
     return (
@@ -258,6 +290,8 @@ export function DuoApp({ roomId }) {
           localVideoRef={videoRef}
           triggerCaptureIntent={triggerCaptureIntent}
           retakeRoundIntent={retakeRoundIntent}
+          onCursorMove={onCursorMove}
+          onFilterSelect={onFilterSelect}
         />
       )}
       {store.phase === 'EXPORT' && (
