@@ -1,8 +1,14 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ClayButton } from "@/components/ui/clay-button";
-import { ArrowRight, Image as ImageIcon, Book, Target, Star, Camera } from "lucide-react";
+import { ArrowRight, Image as ImageIcon, Book, Target, Star, Camera, Users } from "lucide-react";
+import { generateRoomId } from "@/hooks/usePeer";
 
 export default function Home() {
+  const router = useRouter();
+
   return (
     <div>
       <main className="max-w-6xl mx-auto px-4 md:px-8 flex flex-col">
@@ -31,11 +37,23 @@ export default function Home() {
             <div className="flex flex-wrap items-center gap-4 mt-2">
               <ClayButton variant="success" size="lg" className="h-14 px-8 text-lg rounded-2xl border-[3px] shadow-[4px_4px_0px_0px_#2D3748]" asChild>
                 <Link href="/photobooth">
-                  Start Photobooth Free <ArrowRight className="ml-2 w-5 h-5" />
+                  Start Solo Free <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
               </ClayButton>
 
-              <ClayButton variant="secondary" size="lg" className="h-14 px-8 text-lg rounded-2xl border-[3px] shadow-[4px_4px_0px_0px_#2D3748]">
+              <ClayButton
+                variant="primary"
+                size="lg"
+                className="h-14 px-8 text-lg rounded-2xl border-[3px] shadow-[4px_4px_0px_0px_#2D3748] bg-[#FFCFE3] hover:bg-[#FFCFE3]/90 text-[#2D3748]"
+                onClick={() => {
+                  const id = generateRoomId();
+                  router.push(`/room/${id}?host=1`);
+                }}
+              >
+                Duo Mode (P2P) <Users className="ml-2 w-5 h-5" />
+              </ClayButton>
+
+              <ClayButton variant="secondary" size="lg" className="h-14 px-8 text-lg rounded-2xl border-[3px] shadow-[4px_4px_0px_0px_#2D3748]" asChild>
                 <Link href="/frames">
                   Browse Frames
                 </Link>
