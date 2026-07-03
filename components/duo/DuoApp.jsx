@@ -326,14 +326,14 @@ export function DuoApp({ roomId }) {
 
   useEffect(() => {
     if (!showDisconnectOverlay) return;
+    if (isHost) return; // host's peer ID *is* the room — keep it alive, just wait for the guest
 
     const timer = setTimeout(() => {
-      console.log("Auto reconnecting...");
       reconnect();
     }, 3000);
 
     return () => clearTimeout(timer);
-  }, [showDisconnectOverlay, reconnect]);
+  }, [showDisconnectOverlay, reconnect, isHost]);
 
   // Renders by phase
   if (!role) {
