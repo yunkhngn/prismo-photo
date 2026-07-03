@@ -242,8 +242,31 @@ export function usePeer({ roomId, isHost, onData, onRemoteStream, onPeerConnecte
 
   const reconnect = useCallback(() => {
     console.log("Manual reconnect triggered");
+    
+    if (peerRef.current && !peerRef.current.destroyed) {
+      if (peerRef.current.disconnected) {
+        console.log("Reconnecting peer to broker...");
+        peerRef.current.reconnect();
+      }
+      
+      if (!isHost) {
+        console.log("Guest establishing a new datachannel...");
+        if (connRef.current) {
+          try {
+            connRef.current.close();
+          } catch (e) {}
+        }
+        const conn = peerRef.current.connect(roomId, { reliable: true });
+        setupDataConnection(conn);
+      } else {
+        console.log("Host waiting for incoming connections...");
+        setConnectionState('connecting');
+      }
+      return;
+    }
+
     initPeer();
-  }, [initPeer]);
+  }, [initPeer, isHost, roomId, setupDataConnection]);
 
   // Main lifecycle
   useEffect(() => {
