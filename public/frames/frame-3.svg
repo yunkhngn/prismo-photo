@@ -1,5 +1,1 @@
-<svg width="600" height="1800" viewBox="0 0 600 1800" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="0" y="0" width="600" height="1800" stroke="#D4C4A8" stroke-width="50" />
-  <rect x="25" y="25" width="550" height="1750" stroke="#8B4513" stroke-width="2" />
-  <text x="300" y="1780" text-anchor="middle" fill="#8B4513" font-family="serif" font-size="30" font-style="italic">Memories</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="1800" fill="none" viewBox="0 0 600 1800"><rect width="600" height="1800" x="0" y="0" stroke="#D4C4A8" stroke-width="50"/><rect width="550" height="1750" x="25" y="25" stroke="#8B4513" stroke-width="2"/><text x="300" y="1780" fill="#8B4513" font-family="serif" font-size="30" font-style="italic" text-anchor="middle">Memories</text></svg>

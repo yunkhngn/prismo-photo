@@ -1,5 +1,1 @@
-<svg width="600" height="1800" viewBox="0 0 600 1800" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="0" y="0" width="600" height="1800" stroke="#BDE7FF" stroke-width="40" />
-  <rect x="20" y="20" width="560" height="1760" stroke="#fff" stroke-width="5" stroke-dasharray="20 20" />
-  <text x="300" y="1780" text-anchor="middle" fill="#BDE7FF" font-family="Arial" font-size="24" font-weight="bold">COOL VIBES</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="1800" fill="none" viewBox="0 0 600 1800"><rect width="600" height="1800" x="0" y="0" stroke="#BDE7FF" stroke-width="40"/><rect width="560" height="1760" x="20" y="20" stroke="#fff" stroke-dasharray="20 20" stroke-width="5"/><text x="300" y="1780" fill="#BDE7FF" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle">COOL VIBES</text></svg>
